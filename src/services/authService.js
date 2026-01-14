@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://localhost:8000/api/v1';
 
 // Crear instancia de axios con configuración base
 const api = axios.create({
@@ -62,9 +62,14 @@ export const authService = {
       if (error.response?.status === 401) {
         message = 'Credenciales incorrectas';
       } else if (error.response?.status === 422) {
-        const errors = error.response.data.errors || {};
-        const errorMessages = Object.values(errors).flat();
-        message = errorMessages.join(', ') || 'Datos inválidos';
+        const errorData = error.response.data;
+        if (errorData && typeof errorData === 'object' && errorData.errors) {
+          const errors = errorData.errors;
+          const errorMessages = Object.values(errors).flat();
+          message = errorMessages.join(', ') || 'Datos inválidos';
+        } else {
+          message = errorData?.message || 'Datos inválidos';
+        }
       } else if (error.response?.data?.message) {
         message = error.response.data.message;
       }
@@ -87,9 +92,14 @@ export const authService = {
       let message = 'Error al crear cuenta';
       
       if (error.response?.status === 422) {
-        const errors = error.response.data.errors || {};
-        const errorMessages = Object.values(errors).flat();
-        message = errorMessages.join(', ') || 'Datos inválidos';
+        const errorData = error.response.data;
+        if (errorData && typeof errorData === 'object' && errorData.errors) {
+          const errors = errorData.errors;
+          const errorMessages = Object.values(errors).flat();
+          message = errorMessages.join(', ') || 'Datos inválidos';
+        } else {
+          message = errorData?.message || 'Datos inválidos';
+        }
       } else if (error.response?.data?.message) {
         message = error.response.data.message;
       }
