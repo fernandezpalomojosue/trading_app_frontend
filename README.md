@@ -12,7 +12,6 @@ Aplicación web para consumir la API de Trading creada con FastAPI.
 ## Requisitos
 
 - Node.js 16+
-- API de Trading corriendo en `http://localhost:8000`
 
 ## Instalación
 
@@ -24,14 +23,3 @@ npm install
 npm run dev
 ```
 
-## Uso
-
-1. Asegúrate de que la API de Trading esté corriendo en el puerto 8000
-2. Inicia la aplicación con `npm run dev`
-3. Abre `http://localhost:3000` en tu navegador
-
-## Endpoints Utilizados
-
-- `GET /api/v1/markets` - Lista de mercados
-- `GET /api/v1/markets/stocks/overview` - Resumen del mercado
-- `GET /api/v1/markets/stocks/assets` - Lista de activos
