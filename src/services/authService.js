@@ -30,7 +30,8 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
-      window.location.href = '/login';
+      // Emitir evento personalizado para manejar redirección
+      window.dispatchEvent(new CustomEvent('auth:unauthorized'));
     }
     return Promise.reject(error);
   }
@@ -108,49 +109,6 @@ export const authService = {
     }
   },
 
-  // Logout
-  logout: async () => {
-    try {
-      await api.post('/auth/logout');
-    } catch (error) {
-      // Silenciar error de logout
-    } finally {
-      localStorage.removeItem('token');
-    }
-  },
+  };
 
-  // Obtener perfil del usuario
-  getProfile: async () => {
-    try {
-      const response = await api.get('/auth/profile');
-      return response.data;
-    } catch (error) {
-      const message = error.response?.data?.message || 'Error al obtener perfil';
-      throw new Error(message);
-    }
-  },
-
-  // Actualizar perfil
-  updateProfile: async (userData) => {
-    try {
-      const response = await api.put('/auth/profile', userData);
-      return response.data;
-    } catch (error) {
-      const message = error.response?.data?.message || 'Error al actualizar perfil';
-      throw new Error(message);
-    }
-  },
-
-  // Cambiar contraseña
-  changePassword: async (passwordData) => {
-    try {
-      const response = await api.put('/auth/password', passwordData);
-      return response.data;
-    } catch (error) {
-      const message = error.response?.data?.message || 'Error al cambiar contraseña';
-      throw new Error(message);
-    }
-  }
-};
-
-export default api;
+export default authService;

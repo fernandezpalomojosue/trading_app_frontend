@@ -30,10 +30,17 @@ const Register = () => {
       setValidationError('Las contraseñas no coinciden');
       return false;
     }
-    if (formData.password.length < 6) {
-      setValidationError('La contraseña debe tener al menos 6 caracteres');
+    
+    if (formData.password.length < 8) {
+      setValidationError('La contraseña debe tener al menos 8 caracteres');
       return false;
     }
+    
+    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
+      setValidationError('La contraseña debe contener al menos una mayúscula, una minúscula y un número');
+      return false;
+    }
+    
     setValidationError('');
     return true;
   };
@@ -141,7 +148,7 @@ const Register = () => {
                   value={formData.password}
                   onChange={handleChange}
                   className="appearance-none relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Mínimo 6 caracteres"
+                  placeholder="Mínimo 8 caracteres, mayúscula y número"
                 />
                 <button
                   type="button"

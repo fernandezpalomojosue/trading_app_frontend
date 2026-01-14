@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
 
 const AuthContext = createContext();
@@ -15,6 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -32,24 +34,29 @@ export const AuthProvider = ({ children }) => {
     } else {
       setLoading(false);
     }
-  }, []);
+
+    // Escuchar eventos de no autorización
+    const handleUnauthorized = () => {
+      setUser(null);
+      setError(null);
+      navigate('/login', { replace: true });
+    };
+
+    window.addEventListener('auth:unauthorized', handleUnauthorized);
+
+    return () => {
+      window.removeEventListener('auth:unauthorized', handleUnauthorized);
+    };
+  }, [navigate]);
 
   const login = async (credentials) => {
     try {
       setError(null);
       const response = await authService.login(credentials);
       
-      // Guardar el token con el nombre correcto
-      localStorage.setItem('token', response.access_token);
-      
       // Obtener los datos del usuario después del login
-      try {
-        const userData = await authService.verifyToken();
-        setUser(userData);
-      } catch (err) {
-        // Si no podemos verificar el token, establecemos un usuario básico
-        setUser({ email: credentials.email });
-      }
+      const userData = await authService.verifyToken();
+      setUser(userData);
       
       return response;
     } catch (err) {
@@ -63,7 +70,7 @@ export const AuthProvider = ({ children }) => {
       setError(null);
       const response = await authService.register(userData);
       setUser(response.user);
-      localStorage.setItem('token', response.token);
+      localStorage.setItem('token', response.access_token);
       return response;
     } catch (err) {
       setError(err.message);
@@ -93,3 +100,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+export default AuthProvider;
