@@ -48,7 +48,7 @@ const AssetDetail = () => {
         const startDateStr = startDate.toISOString().split('T')[0]; // Formato YYYY-MM-DD
         // Sin endDate para obtener datos hasta hoy
         
-        const candleData = await marketService.getCandles(symbol, timespan, null, limit, startDateStr, null);
+        const candleData = await marketService.getCandles(symbol, timespan, 1, 5000, startDateStr, null);
         
         // Mapear los datos al formato que espera Recharts
         const formattedData = candleData.results?.map((candle, index) => ({
