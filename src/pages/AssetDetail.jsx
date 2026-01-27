@@ -36,7 +36,7 @@ const AssetDetail = () => {
         let startDate = new Date();
         
         if (timespan === 'day') {
-          startDate.setDate(endDate.getDate() - 9); // 9 dias atrás
+          startDate.setDate(endDate.getDate() - 12); // 9 dias atrás
         } else if (timespan === 'week') {
           startDate.setDate(endDate.getDate() - 69); // 10 semanas atrás (69 días)
         } else if (timespan === 'month') {
