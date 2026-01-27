@@ -31,28 +31,25 @@ const AssetDetail = () => {
         setChartLoading(true);
         let limit = 5000;
         
-        // Calcular fechas para obtener exactamente 10 velas
         const endDate = new Date();
         let startDate = new Date();
         
         if (timespan === 'day') {
-          startDate.setDate(endDate.getDate() - 12); // 9 dias atrás
+          startDate.setDate(endDate.getDate() - 12); 
         } else if (timespan === 'week') {
-          startDate.setDate(endDate.getDate() - 69); // 10 semanas atrás (69 días)
+          startDate.setDate(endDate.getDate() - 69); 
         } else if (timespan === 'month') {
-          startDate.setMonth(endDate.getMonth() - 9); // 9 meses atrás
+          startDate.setMonth(endDate.getMonth() - 9); 
         } else if (timespan === 'year') {
-          startDate.setFullYear(endDate.getFullYear() - 2); // 2 años atrás para 3 velas anuales
+          startDate.setFullYear(endDate.getFullYear() - 2); 
         }
         
-        const startDateStr = startDate.toISOString().split('T')[0]; // Formato YYYY-MM-DD
-        // Sin endDate para obtener datos hasta hoy
+        const startDateStr = startDate.toISOString().split('T')[0];
         
         const candleData = await marketService.getCandles(symbol, timespan, 1, 5000, startDateStr, null);
         
-        // Mapear los datos al formato que espera Recharts
         const formattedData = candleData.results?.map((candle, index) => ({
-          index: index, // Índice simple para el eje X
+          index: index,
           timestamp: candle.t,
           date: new Date(candle.t).toLocaleDateString('es-ES'),
           close: candle.c,
