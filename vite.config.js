@@ -11,5 +11,18 @@ export default defineConfig({
         changeOrigin: true,
       }
     }
+  },
+  // Agregar esta configuración para producción
+  preview: {
+    port: 4173,
+    historyApiFallback: true,
+  },
+  build: {
+    // Asegurar que el build maneje correctamente las rutas
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
   }
 })
