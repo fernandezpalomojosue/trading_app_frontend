@@ -65,7 +65,7 @@ describe('authService', () => {
 
       const credentials = { email: 'test@example.com', password: 'wrong' };
       
-      await expect(authService.login(credentials)).rejects.toThrow('Las credenciales proporcionadas son incorrectas.');
+      await expect(authService.login(credentials)).rejects.toThrow('Correo electrónico o contraseña incorrectos. Verifica tus datos e intenta de nuevo.');
       expect(localStorage.getItem('token')).toBeNull();
     });
 

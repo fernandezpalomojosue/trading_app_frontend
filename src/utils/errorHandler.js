@@ -13,6 +13,27 @@ class ErrorHandler {
         token: 'Tu sesión no es válida. Inicia sesión nuevamente para continuar.'
       },
       
+      // Errores de recurso no encontrado
+      404: {
+        default: 'El recurso solicitado no existe. Verifica la URL o contacta soporte.',
+        login: 'El servicio de inicio de sesión no está disponible. Intenta más tarde.',
+        register: 'El servicio de registro no está disponible. Intenta más tarde.',
+        token: 'El servicio de verificación no está disponible. Intenta más tarde.',
+        markets: 'Los datos de mercado no están disponibles en este momento.',
+        assets: 'No se encontraron activos con los criterios especificados.',
+        assetDetails: 'El activo solicitado no existe o no está disponible.',
+        candles: 'No hay datos de velas disponibles para este activo en el período seleccionado.'
+      },
+      
+      // Errores de permisos
+      403: {
+        default: 'No tienes permisos para realizar esta acción.',
+        login: 'Acceso denegado. Verifica tus credenciales.',
+        register: 'No se permite el registro en este momento.',
+        markets: 'No tienes acceso a estos datos de mercado.',
+        assets: 'No tienes permiso para ver estos activos.'
+      },
+      
       // Errores de validación
       422: {
         default: 'Los datos proporcionados no son válidos. Revisa la información e intenta de nuevo.',
@@ -21,10 +42,25 @@ class ErrorHandler {
         credentials: 'Las credenciales proporcionadas son incorrectas.'
       },
       
+      // Límite de velocidad
+      429: {
+        default: 'Has realizado demasiadas solicitudes. Espera unos minutos antes de intentar de nuevo.',
+        login: 'Demasiados intentos de inicio de sesión. Espera unos minutos antes de volver a intentarlo.',
+        register: 'Demasiados intentos de registro. Espera unos minutos antes de volver a intentarlo.'
+      },
+      
       // Errores del servidor
       500: {
         default: 'El servidor está experimentando problemas. Intenta de nuevo en unos minutos.',
         database: 'No se pudieron guardar tus cambios. Intenta de nuevo más tarde.'
+      },
+      
+      // Servicio no disponible
+      503: {
+        default: 'El servicio no está disponible temporalmente. Intenta de nuevo en unos minutos.',
+        login: 'El servicio de autenticación no está disponible. Intenta más tarde.',
+        register: 'El servicio de registro no está disponible. Intenta más tarde.',
+        markets: 'Los datos de mercado no están disponibles temporalmente.'
       },
       
       // Errores de red
@@ -82,11 +118,15 @@ class ErrorHandler {
       const status = error.response.status;
       const errorData = error.response.data;
       
-      // Mensajes específicos del backend
-      if (errorData?.message) {
+      // Primero usar mensajes personalizados según status y contexto
+      const customMessage = this.getHttpErrorMessage(status, context);
+      if (customMessage !== this.errorMessages.default) {
+        processedError.message = customMessage;
+      } else if (errorData?.message) {
+        // Solo usar mensaje del backend si no hay mensaje personalizado
         processedError.message = this.formatBackendMessage(errorData.message);
       } else {
-        processedError.message = this.getHttpErrorMessage(status, context);
+        processedError.message = this.errorMessages.default;
       }
 
       // Errores de validación con detalles
@@ -207,12 +247,34 @@ class ErrorHandler {
       } else {
         suggestions.push('Inicia sesión nuevamente para continuar');
       }
+    } else if (status === 403) {
+      suggestions.push('Verifica que tienes los permisos necesarios');
+      suggestions.push('Contacta al administrador si crees que es un error');
+    } else if (status === 404) {
+      if (context === 'login' || context === 'register' || context === 'token') {
+        suggestions.push('El servicio de autenticación no está disponible');
+        suggestions.push('Intenta de nuevo en unos minutos');
+        suggestions.push('Si el problema persiste, contacta soporte técnico');
+      } else if (context === 'markets' || context === 'assets' || context === 'assetDetails' || context === 'candles') {
+        suggestions.push('Verifica que los criterios de búsqueda sean correctos');
+        suggestions.push('Intenta con otros parámetros de búsqueda');
+      } else {
+        suggestions.push('Verifica la URL o los parámetros de la solicitud');
+        suggestions.push('El recurso solicitado puede no existir');
+      }
     } else if (status === 422) {
       suggestions.push('Revisa que todos los campos estén completos');
       suggestions.push('Verifica el formato de los datos ingresados');
-    } else if (status >= 500) {
+    } else if (status === 429) {
+      suggestions.push('Espera unos minutos antes de intentar de nuevo');
+      suggestions.push('Has superado el límite de solicitudes permitidas');
+    } else if (status === 500) {
       suggestions.push('Espera unos minutos e intenta de nuevo');
       suggestions.push('Si el problema persiste, contacta soporte técnico');
+    } else if (status === 503) {
+      suggestions.push('El servicio está en mantenimiento temporal');
+      suggestions.push('Intenta de nuevo en unos minutos');
+      suggestions.push('Revisa el estado del servicio en la página de estado');
     } else {
       suggestions.push('Intenta recargar la página');
       suggestions.push('Verifica tu conexión a internet');
