@@ -65,7 +65,7 @@ describe('authService', () => {
 
       const credentials = { email: 'test@example.com', password: 'wrong' };
       
-      await expect(authService.login(credentials)).rejects.toThrow('Credenciales incorrectas');
+      await expect(authService.login(credentials)).rejects.toThrow('Las credenciales proporcionadas son incorrectas.');
       expect(localStorage.getItem('token')).toBeNull();
     });
 
@@ -85,7 +85,7 @@ describe('authService', () => {
 
       const credentials = { email: '', password: '123' };
       
-      await expect(authService.login(credentials)).rejects.toThrow('Email is required, Password must be at least 8 characters');
+      await expect(authService.login(credentials)).rejects.toThrow('Los datos proporcionados no son válidos. Revisa la información e intenta de nuevo.');
     });
 
     it('should handle generic error message', async () => {
@@ -105,7 +105,7 @@ describe('authService', () => {
       apiClient.post.mockRejectedValue(error);
 
       await expect(authService.login({ email: 'test@example.com', password: 'password' }))
-        .rejects.toThrow('Error al iniciar sesión');
+        .rejects.toThrow('Ocurrió un error inesperado. Por favor, intenta de nuevo.');
     });
   });
 
@@ -147,7 +147,7 @@ describe('authService', () => {
 
       const userData = { email: 'existing@example.com', password: 'weak' };
       
-      await expect(authService.register(userData)).rejects.toThrow('Email already exists, Password too weak');
+      await expect(authService.register(userData)).rejects.toThrow('Los datos proporcionados no son válidos. Revisa la información e intenta de nuevo.');
     });
 
     it('should handle generic registration error', async () => {
@@ -167,7 +167,7 @@ describe('authService', () => {
       apiClient.post.mockRejectedValue(error);
 
       await expect(authService.register({ email: 'test@example.com', password: 'password' }))
-        .rejects.toThrow('Error al crear cuenta');
+        .rejects.toThrow('Ocurrió un error inesperado. Por favor, intenta de nuevo.');
     });
   });
 
@@ -194,7 +194,7 @@ describe('authService', () => {
       
       localStorage.setItem('token', 'invalid-token');
 
-      await expect(authService.verifyToken()).rejects.toThrow('Token inválido');
+      await expect(authService.verifyToken()).rejects.toThrow('Tu sesión no es válida. Inicia sesión nuevamente para continuar.');
       expect(localStorage.getItem('token')).toBeNull();
     });
 
@@ -204,7 +204,7 @@ describe('authService', () => {
       
       localStorage.setItem('token', 'some-token');
 
-      await expect(authService.verifyToken()).rejects.toThrow('Token inválido');
+      await expect(authService.verifyToken()).rejects.toThrow('Ocurrió un error inesperado. Por favor, intenta de nuevo.');
       expect(localStorage.getItem('token')).toBeNull();
     });
   });
