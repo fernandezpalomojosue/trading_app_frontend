@@ -1,4 +1,5 @@
 import apiClient from './api';
+import { handleError } from '../utils/errorHandler';
 
 const api = apiClient;
 
@@ -22,24 +23,8 @@ export const authService = {
       
       return response.data;
     } catch (error) {
-      let message = 'Error al iniciar sesión';
-      
-      if (error.response?.status === 401) {
-        message = 'Credenciales incorrectas';
-      } else if (error.response?.status === 422) {
-        const errorData = error.response.data;
-        if (errorData && typeof errorData === 'object' && errorData.errors) {
-          const errors = errorData.errors;
-          const errorMessages = Object.values(errors).flat();
-          message = errorMessages.join(', ') || 'Datos inválidos';
-        } else {
-          message = errorData?.message || 'Datos inválidos';
-        }
-      } else if (error.response?.data?.message) {
-        message = error.response.data.message;
-      }
-      
-      throw new Error(message);
+      const processedError = handleError(error, 'login');
+      throw processedError;
     }
   },
 
@@ -54,22 +39,8 @@ export const authService = {
       
       return response.data;
     } catch (error) {
-      let message = 'Error al crear cuenta';
-      
-      if (error.response?.status === 422) {
-        const errorData = error.response.data;
-        if (errorData && typeof errorData === 'object' && errorData.errors) {
-          const errors = errorData.errors;
-          const errorMessages = Object.values(errors).flat();
-          message = errorMessages.join(', ') || 'Datos inválidos';
-        } else {
-          message = errorData?.message || 'Datos inválidos';
-        }
-      } else if (error.response?.data?.message) {
-        message = error.response.data.message;
-      }
-      
-      throw new Error(message);
+      const processedError = handleError(error, 'register');
+      throw processedError;
     }
   },
 
@@ -80,7 +51,8 @@ export const authService = {
       return response.data;
     } catch (error) {
       localStorage.removeItem('token');
-      throw new Error('Token inválido');
+      const processedError = handleError(error, 'token');
+      throw processedError;
     }
   },
 
