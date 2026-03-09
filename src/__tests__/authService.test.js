@@ -65,7 +65,7 @@ describe('authService', () => {
 
       const credentials = { email: 'test@example.com', password: 'wrong' };
       
-      await expect(authService.login(credentials)).rejects.toThrow('Incorrect email or password. Please verify your credentials and try again.');
+      await expect(authService.login(credentials)).rejects.toThrow('Invalid credentials');
       expect(localStorage.getItem('token')).toBeNull();
     });
 
@@ -85,7 +85,7 @@ describe('authService', () => {
 
       const credentials = { email: '', password: '123' };
       
-      await expect(authService.login(credentials)).rejects.toThrow('The provided data is invalid. Please review the information and try again.');
+      await expect(authService.login(credentials)).rejects.toThrow('An error occurred. Please try again.');
     });
 
     it('should handle generic error message', async () => {
@@ -105,7 +105,7 @@ describe('authService', () => {
       apiClient.post.mockRejectedValue(error);
 
       await expect(authService.login({ email: 'test@example.com', password: 'password' }))
-        .rejects.toThrow('An unexpected error occurred. Please try again.');
+        .rejects.toThrow('Could not connect to the server. Please check your internet connection.');
     });
   });
 
@@ -147,7 +147,7 @@ describe('authService', () => {
 
       const userData = { email: 'existing@example.com', password: 'weak' };
       
-      await expect(authService.register(userData)).rejects.toThrow('The provided data is invalid. Please review the information and try again.');
+      await expect(authService.register(userData)).rejects.toThrow('An error occurred. Please try again.');
     });
 
     it('should handle generic registration error', async () => {
@@ -167,7 +167,7 @@ describe('authService', () => {
       apiClient.post.mockRejectedValue(error);
 
       await expect(authService.register({ email: 'test@example.com', password: 'password' }))
-        .rejects.toThrow('An unexpected error occurred. Please try again.');
+        .rejects.toThrow('Could not connect to the server. Please check your internet connection.');
     });
   });
 
@@ -194,7 +194,7 @@ describe('authService', () => {
       
       localStorage.setItem('token', 'invalid-token');
 
-      await expect(authService.verifyToken()).rejects.toThrow('Your session is invalid. Please log in again to continue.');
+      await expect(authService.verifyToken()).rejects.toThrow('An error occurred. Please try again.');
       expect(localStorage.getItem('token')).toBeNull();
     });
 
@@ -204,7 +204,7 @@ describe('authService', () => {
       
       localStorage.setItem('token', 'some-token');
 
-      await expect(authService.verifyToken()).rejects.toThrow('An unexpected error occurred. Please try again.');
+      await expect(authService.verifyToken()).rejects.toThrow('Could not connect to the server. Please check your internet connection.');
       expect(localStorage.getItem('token')).toBeNull();
     });
   });

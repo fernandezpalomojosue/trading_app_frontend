@@ -118,62 +118,24 @@ class ErrorHandler {
       const status = error.response.status;
       const errorData = error.response.data;
       
-      console.log('DEBUG: Error received:', { status, errorData });
-      
-      // First check for FastAPI validation errors with detail array
+      // For FastAPI validation errors with detail array, use the first error message directly
       if (status === 422 && Array.isArray(errorData?.detail) && errorData.detail.length > 0) {
-        // For FastAPI validation errors, use the first error message
         const firstError = errorData.detail[0];
         processedError.message = firstError.msg || 'Validation error';
-        
-        console.log('DEBUG: Processing FastAPI error:', firstError);
-        
-        // Extract field name from location array if available
-        const fieldName = firstError.loc?.[1] || 'field';
-        
-        console.log('DEBUG: Field name:', fieldName);
-        
-        // Generate specific suggestions based on error type and context
-        processedError.suggestions = this.generateFastAPISuggestions(firstError, fieldName);
-        
-        console.log('DEBUG: Generated suggestions:', processedError.suggestions);
+        processedError.suggestions = [];
       } else if (errorData?.message) {
-        const backendMessage = this.formatBackendMessage(errorData.message);
-        
-        // Para errores 4xx, usar mensaje del backend si es claro y específico
-        if (status >= 400 && status < 500 && status !== 401) {
-          processedError.message = backendMessage;
-        } else {
-          // Para 401 y errores 5xx, preferir mensajes personalizados
-          const customMessage = this.getHttpErrorMessage(status, context);
-          processedError.message = customMessage !== this.errorMessages.default ? customMessage : backendMessage;
-        }
+        // Use backend message directly
+        processedError.message = errorData.message;
+        processedError.suggestions = [];
       } else {
-        // Si no hay mensaje del backend, usar mensaje personalizado
-        processedError.message = this.getHttpErrorMessage(status, context);
-      }
-
-      // Errores de validación con detalles
-      if (status === 422) {
-        // Handle FastAPI validation errors format
-        if (Array.isArray(errorData?.detail)) {
-          processedError.suggestions = this.extractFastAPIValidationSuggestions(errorData.detail);
-        } else if (errorData?.errors) {
-          processedError.suggestions = this.extractValidationSuggestions(errorData.errors);
-        } else {
-          processedError.suggestions = this.getGeneralSuggestions(status, context);
-        }
-      } else {
-        processedError.suggestions = this.getGeneralSuggestions(status, context);
+        // Default message
+        processedError.message = 'An error occurred. Please try again.';
+        processedError.suggestions = [];
       }
     } else {
       // Errores sin respuesta del servidor
-      processedError.message = this.errorMessages.default;
-      processedError.suggestions = [
-        'Try reloading the page',
-        'Check your internet connection',
-        'If the problem persists, contact technical support'
-      ];
+      processedError.message = 'Could not connect to the server. Please check your internet connection.';
+      processedError.suggestions = [];
     }
 
     return processedError;
@@ -231,7 +193,6 @@ class ErrorHandler {
    * Generate specific suggestions for FastAPI validation errors
    */
   generateFastAPISuggestions(error, fieldName) {
-    console.log('DEBUG: generateFastAPISuggestions called with:', { error, fieldName });
     const suggestions = [];
     
     if (error.type === 'value_error') {
@@ -250,7 +211,6 @@ class ErrorHandler {
       }
     }
     
-    console.log('DEBUG: Final FastAPI suggestions:', suggestions);
     return suggestions.length > 0 ? suggestions : ['Please check your input and try again'];
   }
 

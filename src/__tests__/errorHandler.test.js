@@ -12,9 +12,8 @@ describe('errorHandler - 404 errors', () => {
     
     const processedError = handleError(error, 'login');
     
-    expect(processedError.message).toBe('Resource not found.');
-    expect(processedError.suggestions).toContain('Authentication service is not available');
-    expect(processedError.suggestions).toContain('Try again in a few minutes');
+    expect(processedError.message).toBe('Not Found');
+    expect(processedError.suggestions).toEqual([]);
   });
 
   it('should handle 404 error in markets context with specific message', () => {
@@ -28,7 +27,7 @@ describe('errorHandler - 404 errors', () => {
     const processedError = handleError(error, 'markets');
     
     expect(processedError.message).toBe('Market not found');
-    expect(processedError.suggestions).toContain('Check that the search criteria are correct');
+    expect(processedError.suggestions).toEqual([]);
   });
 
   it('should handle 404 error in assets context with specific message', () => {
@@ -42,7 +41,7 @@ describe('errorHandler - 404 errors', () => {
     const processedError = handleError(error, 'assetDetails');
     
     expect(processedError.message).toBe('Asset not found');
-    expect(processedError.suggestions).toContain('Check that the search criteria are correct');
+    expect(processedError.suggestions).toEqual([]);
   });
 
   it('should handle 404 error in default context with generic message', () => {
@@ -55,8 +54,8 @@ describe('errorHandler - 404 errors', () => {
     
     const processedError = handleError(error, 'default');
     
-    expect(processedError.message).toBe('Resource not found.');
-    expect(processedError.suggestions).toContain('Check the URL or request parameters');
+    expect(processedError.message).toBe('Not Found');
+    expect(processedError.suggestions).toEqual([]);
   });
 });
 
@@ -84,8 +83,7 @@ describe('errorHandler - FastAPI validation errors', () => {
     const processedError = handleError(error, 'register');
     
     expect(processedError.message).toBe("value is not a valid email address: The part after the @-sign is not valid. It should have a period.");
-    expect(processedError.suggestions).toContain('Please enter a valid email address');
-    expect(processedError.suggestions).toContain('Email validation: The part after the @-sign is not valid. It should have a period.');
+    expect(processedError.suggestions).toEqual([]);
   });
 
   it('should handle FastAPI required field validation error', () => {
@@ -110,6 +108,6 @@ describe('errorHandler - FastAPI validation errors', () => {
     const processedError = handleError(error, 'register');
     
     expect(processedError.message).toBe("field required");
-    expect(processedError.suggestions).toContain('The email field is required');
+    expect(processedError.suggestions).toEqual([]);
   });
 });
