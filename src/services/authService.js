@@ -39,7 +39,9 @@ export const authService = {
       
       return response.data;
     } catch (error) {
+      console.log('DEBUG: authService.register received error:', error);
       const processedError = handleError(error, 'register');
+      console.log('DEBUG: authService.register processed error:', processedError);
       throw processedError;
     }
   },
