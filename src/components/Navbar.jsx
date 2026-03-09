@@ -31,14 +31,14 @@ const Navbar = () => {
                   className="flex items-center space-x-2 text-gray-600 hover:text-green-600 transition-colors"
                 >
                   <BarChart3 className="h-5 w-5" />
-                  <span>Resumen</span>
+                  <span>Overview</span>
                 </Link>
                 <Link
                   to="/assets"
                   className="flex items-center space-x-2 text-gray-600 hover:text-green-600 transition-colors"
                 >
                   <TrendingUp className="h-5 w-5" />
-                  <span>Activos</span>
+                  <span>Assets</span>
                 </Link>
                 <div className="flex items-center space-x-3 pl-6 border-l border-gray-300">
                   <div className="flex items-center space-x-2">
@@ -50,7 +50,7 @@ const Navbar = () => {
                     className="flex items-center space-x-2 text-red-600 hover:text-red-700 transition-colors"
                   >
                     <LogOut className="h-5 w-5" />
-                    <span>Cerrar sesión</span>
+                    <span>Sign Out</span>
                   </button>
                 </div>
               </>
@@ -60,13 +60,13 @@ const Navbar = () => {
                   to="/login"
                   className="text-gray-600 hover:text-green-600 transition-colors font-medium"
                 >
-                  Iniciar sesión
+                  Sign In
                 </Link>
                 <Link
                   to="/register"
                   className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors font-medium"
                 >
-                  Registrarse
+                  Sign Up
                 </Link>
               </>
             )}
@@ -99,7 +99,7 @@ const Navbar = () => {
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <BarChart3 className="h-5 w-5" />
-                    <span>Resumen</span>
+                    <span>Overview</span>
                   </Link>
                   <Link
                     to="/assets"
@@ -107,7 +107,7 @@ const Navbar = () => {
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <TrendingUp className="h-5 w-5" />
-                    <span>Activos</span>
+                    <span>Assets</span>
                   </Link>
                   <div className="pt-3 border-t border-gray-200">
                     <div className="flex items-center space-x-2 mb-3">
@@ -119,7 +119,7 @@ const Navbar = () => {
                       className="flex items-center space-x-2 text-red-600 hover:text-red-700 transition-colors"
                     >
                       <LogOut className="h-5 w-5" />
-                      <span>Cerrar sesión</span>
+                      <span>Sign Out</span>
                     </button>
                   </div>
                 </>
@@ -130,14 +130,14 @@ const Navbar = () => {
                     className="text-gray-600 hover:text-green-600 transition-colors font-medium"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    Iniciar sesión
+                    Sign In
                   </Link>
                   <Link
                     to="/register"
                     className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors font-medium text-center"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    Registrarse
+                    Sign Up
                   </Link>
                 </>
               )}
