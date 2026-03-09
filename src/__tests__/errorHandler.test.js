@@ -12,9 +12,9 @@ describe('errorHandler - 404 errors', () => {
     
     const processedError = handleError(error, 'login');
     
-    expect(processedError.message).toBe('El servicio de inicio de sesión no está disponible. Intenta más tarde.');
-    expect(processedError.suggestions).toContain('El servicio de autenticación no está disponible');
-    expect(processedError.suggestions).toContain('Intenta de nuevo en unos minutos');
+    expect(processedError.message).toBe('Resource not found.');
+    expect(processedError.suggestions).toContain('Authentication service is not available');
+    expect(processedError.suggestions).toContain('Try again in a few minutes');
   });
 
   it('should handle 404 error in markets context with specific message', () => {
@@ -27,8 +27,8 @@ describe('errorHandler - 404 errors', () => {
     
     const processedError = handleError(error, 'markets');
     
-    expect(processedError.message).toBe('Los datos de mercado no están disponibles en este momento.');
-    expect(processedError.suggestions).toContain('Verifica que los criterios de búsqueda sean correctos');
+    expect(processedError.message).toBe('Market not found');
+    expect(processedError.suggestions).toContain('Check that the search criteria are correct');
   });
 
   it('should handle 404 error in assets context with specific message', () => {
@@ -41,8 +41,8 @@ describe('errorHandler - 404 errors', () => {
     
     const processedError = handleError(error, 'assetDetails');
     
-    expect(processedError.message).toBe('El activo solicitado no existe o no está disponible.');
-    expect(processedError.suggestions).toContain('Verifica que los criterios de búsqueda sean correctos');
+    expect(processedError.message).toBe('Asset not found');
+    expect(processedError.suggestions).toContain('Check that the search criteria are correct');
   });
 
   it('should handle 404 error in default context with generic message', () => {
@@ -55,7 +55,7 @@ describe('errorHandler - 404 errors', () => {
     
     const processedError = handleError(error, 'default');
     
-    expect(processedError.message).toBe('El recurso solicitado no existe. Verifica la URL o contacta soporte.');
-    expect(processedError.suggestions).toContain('Verifica la URL o los parámetros de la solicitud');
+    expect(processedError.message).toBe('Resource not found.');
+    expect(processedError.suggestions).toContain('Check the URL or request parameters');
   });
 });

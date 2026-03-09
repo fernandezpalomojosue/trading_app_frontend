@@ -158,44 +158,26 @@ class ErrorHandler {
    * Formatea mensajes del backend para que sean más amigables
    */
   formatBackendMessage(message) {
-    // Si el mensaje ya está en español y es claro, mantenerlo
-    const spanishMessages = [
-      'El correo electrónico ya está registrado',
-      'La contraseña es muy débil',
-      'El correo electrónico ya existe',
-      'La contraseña debe tener al menos',
-      'El campo es obligatorio',
-      'No se encontraron resultados',
-      'El recurso no fue encontrado',
-      'Acceso denegado',
-      'Permiso insuficiente'
-    ];
-    
-    // Si el mensaje ya está en español y es comprensible, mantenerlo
-    if (spanishMessages.some(spanishMsg => message.includes(spanishMsg))) {
-      return message;
-    }
-    
-    // Mensajes técnicos que necesitan traducción
+    // Technical messages that need formatting (keep in English)
     const messageMap = {
-      'Invalid credentials': 'Las credenciales proporcionadas son incorrectas.',
-      'User already exists': 'El usuario ya está registrado.',
-      'Email already exists': 'El correo electrónico ya está registrado.',
-      'Email already registered': 'El correo electrónico ya está registrado.',
-      'Invalid email format': 'El formato del correo electrónico no es válido.',
-      'Password too weak': 'La contraseña es muy débil. Debe contener mayúsculas, minúsculas y números.',
-      'Password must be at least 8 characters': 'La contraseña debe tener al menos 8 caracteres.',
-      'Field is required': 'Este campo es obligatorio.',
-      'Not Found': 'Recurso no encontrado.',
-      'Access denied': 'Acceso denegado.',
-      'Unauthorized': 'No autorizado.',
-      'Token expired': 'Tu sesión ha expirado.',
-      'Invalid token': 'Token inválido.',
-      'Too many requests': 'Has realizado demasiadas solicitudes.',
-      'Server error': 'Error del servidor.',
-      'Database error': 'Error en la base de datos.',
-      'Network error': 'Error de red.',
-      'Connection timeout': 'Tiempo de conexión agotado.'
+      'Invalid credentials': 'Incorrect email or password. Please verify your credentials and try again.',
+      'User already exists': 'User already exists.',
+      'Email already exists': 'Email already exists.',
+      'Email already registered': 'Email already registered.',
+      'Invalid email format': 'Invalid email format.',
+      'Password too weak': 'Password too weak. Must contain uppercase, lowercase and numbers.',
+      'Password must be at least 8 characters': 'Password must be at least 8 characters.',
+      'Field is required': 'This field is required.',
+      'Not Found': 'Resource not found.',
+      'Access denied': 'Access denied.',
+      'Unauthorized': 'Unauthorized.',
+      'Token expired': 'Your session has expired.',
+      'Invalid token': 'Invalid token.',
+      'Too many requests': 'Too many requests.',
+      'Server error': 'Server error.',
+      'Database error': 'Database error.',
+      'Network error': 'Network error.',
+      'Connection timeout': 'Connection timeout.'
     };
     
     return messageMap[message] || message;
