@@ -130,14 +130,24 @@ class ErrorHandler {
           const customMessage = this.getHttpErrorMessage(status, context);
           processedError.message = customMessage !== this.errorMessages.default ? customMessage : backendMessage;
         }
+      } else if (status === 422 && errorData?.detail?.[0]?.msg) {
+        // For FastAPI validation errors, use the first error message
+        processedError.message = errorData.detail[0].msg;
       } else {
         // Si no hay mensaje del backend, usar mensaje personalizado
         processedError.message = this.getHttpErrorMessage(status, context);
       }
 
       // Errores de validación con detalles
-      if (status === 422 && errorData?.errors) {
-        processedError.suggestions = this.extractValidationSuggestions(errorData.errors);
+      if (status === 422) {
+        // Handle FastAPI validation errors format
+        if (errorData?.detail) {
+          processedError.suggestions = this.extractFastAPIValidationSuggestions(errorData.detail);
+        } else if (errorData?.errors) {
+          processedError.suggestions = this.extractValidationSuggestions(errorData.errors);
+        } else {
+          processedError.suggestions = this.getGeneralSuggestions(status, context);
+        }
       } else {
         processedError.suggestions = this.getGeneralSuggestions(status, context);
       }
@@ -145,9 +155,9 @@ class ErrorHandler {
       // Errores sin respuesta del servidor
       processedError.message = this.errorMessages.default;
       processedError.suggestions = [
-        'Intenta recargar la página',
-        'Verifica tu conexión a internet',
-        'Si el problema persiste, contacta soporte técnico'
+        'Try reloading the page',
+        'Check your internet connection',
+        'If the problem persists, contact technical support'
       ];
     }
 
@@ -203,6 +213,34 @@ class ErrorHandler {
   }
 
   /**
+   * Extrae sugerencias de errores de validación de FastAPI
+   */
+  extractFastAPIValidationSuggestions(detail) {
+    const suggestions = [];
+    
+    detail.forEach(error => {
+      if (error.type === 'value_error') {
+        if (error.msg.includes('email')) {
+          suggestions.push('Please enter a valid email address');
+          if (error.ctx?.reason) {
+            suggestions.push(`Email validation: ${error.ctx.reason}`);
+          }
+        } else if (error.msg.includes('password')) {
+          suggestions.push('Please enter a valid password');
+        } else if (error.msg.includes('required')) {
+          const fieldName = error.loc?.[1] || 'field';
+          suggestions.push(`The ${fieldName} field is required`);
+        } else {
+          // Use the original message for other validation errors
+          suggestions.push(error.msg);
+        }
+      }
+    });
+    
+    return suggestions.length > 0 ? suggestions : ['Please check your input and try again'];
+  }
+
+  /**
    * Extrae sugerencias de errores de validación
    */
   extractValidationSuggestions(errors) {
@@ -215,7 +253,7 @@ class ErrorHandler {
       });
     });
     
-    return suggestions.length > 0 ? suggestions : ['Revisa todos los campos e intenta de nuevo.'];
+    return suggestions.length > 0 ? suggestions : ['Review all fields and try again.'];
   }
 
   /**
@@ -223,31 +261,32 @@ class ErrorHandler {
    */
   formatValidationMessage(field, message) {
     const fieldNames = {
-      email: 'correo electrónico',
-      password: 'contraseña',
-      name: 'nombre',
-      username: 'nombre de usuario'
+      email: 'email',
+      password: 'password',
+      name: 'name',
+      username: 'username'
     };
 
     const fieldName = fieldNames[field] || field;
     
-    // Mensajes comunes de validación
+    // Common validation messages
     if (message.includes('required')) {
-      return `El campo "${fieldName}" es obligatorio.`;
+      return `The "${fieldName}" field is required.`;
     }
     
     if (message.includes('email')) {
-      return `El ${fieldName} no tiene un formato válido.`;
+      return `The ${fieldName} is not in a valid format.`;
     }
     
     if (message.includes('password') && message.includes('weak')) {
-      return `La contraseña debe contener mayúsculas, minúsculas y números.`;
+      return `The password must contain uppercase, lowercase and numbers.`;
     }
     
-    if (message.includes('min') && message.includes('length')) {
-      return `El ${fieldName} es demasiado corto.`;
+    if (message.includes('password') && message.includes('length')) {
+      return `The password must be at least 8 characters long.`;
     }
     
+    // Return original message if no specific format is found
     return message;
   }
 
