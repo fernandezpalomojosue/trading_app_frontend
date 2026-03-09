@@ -60,7 +60,11 @@ export const AuthProvider = ({ children }) => {
       
       return response;
     } catch (err) {
-      setError(err.message);
+      console.log('Error caught in AuthContext login:', err);
+      console.log('Error message:', err.message);
+      console.log('Error type:', err.type);
+      console.log('Error suggestions:', err.suggestions);
+      setError(err);
       throw err;
     }
   };
@@ -73,7 +77,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('token', response.access_token);
       return response;
     } catch (err) {
-      setError(err.message);
+      setError(err);
       throw err;
     }
   };

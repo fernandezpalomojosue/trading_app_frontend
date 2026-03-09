@@ -8,6 +8,7 @@ import AssetsList from './pages/AssetsList';
 import AssetDetail from './pages/AssetDetail';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ErrorTestPage from './pages/ErrorTestPage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/test-errors" element={<ErrorTestPage />} />
               <Route path="/" element={
                 <ProtectedRoute>
                   <MarketOverview />

@@ -18,6 +18,11 @@ const ErrorDisplay = ({
 }) => {
   if (!error) return null;
 
+  console.log('ErrorDisplay received error:', error);
+  console.log('Error message:', error.message);
+  console.log('Error type:', error.type);
+  console.log('Error suggestions:', error.suggestions);
+
   const getErrorIcon = () => {
     switch (error.type) {
       case 'network':
