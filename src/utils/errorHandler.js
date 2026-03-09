@@ -118,6 +118,8 @@ class ErrorHandler {
       const status = error.response.status;
       const errorData = error.response.data;
       
+      console.log('DEBUG: Error received:', { status, errorData });
+      
       // For FastAPI validation errors with detail array, use the first error message directly
       if (status === 422 && Array.isArray(errorData?.detail) && errorData.detail.length > 0) {
         const firstError = errorData.detail[0];
@@ -134,6 +136,7 @@ class ErrorHandler {
       }
     } else {
       // Errores sin respuesta del servidor
+      console.log('DEBUG: No response error:', error);
       processedError.message = 'Could not connect to the server. Please check your internet connection.';
       processedError.suggestions = [];
     }
