@@ -118,8 +118,26 @@ class ErrorHandler {
       const status = error.response.status;
       const errorData = error.response.data;
       
-      // Primero verificar si el backend proporciona un mensaje claro
-      if (errorData?.message) {
+      console.log('DEBUG: Error received:', { status, errorData });
+      
+      // First check for FastAPI validation errors with detail array
+      if (status === 422 && Array.isArray(errorData?.detail) && errorData.detail.length > 0) {
+        // For FastAPI validation errors, use the first error message
+        const firstError = errorData.detail[0];
+        processedError.message = firstError.msg || 'Validation error';
+        
+        console.log('DEBUG: Processing FastAPI error:', firstError);
+        
+        // Extract field name from location array if available
+        const fieldName = firstError.loc?.[1] || 'field';
+        
+        console.log('DEBUG: Field name:', fieldName);
+        
+        // Generate specific suggestions based on error type and context
+        processedError.suggestions = this.generateFastAPISuggestions(firstError, fieldName);
+        
+        console.log('DEBUG: Generated suggestions:', processedError.suggestions);
+      } else if (errorData?.message) {
         const backendMessage = this.formatBackendMessage(errorData.message);
         
         // Para errores 4xx, usar mensaje del backend si es claro y específico
@@ -130,9 +148,6 @@ class ErrorHandler {
           const customMessage = this.getHttpErrorMessage(status, context);
           processedError.message = customMessage !== this.errorMessages.default ? customMessage : backendMessage;
         }
-      } else if (status === 422 && Array.isArray(errorData?.detail) && errorData.detail[0]?.msg) {
-        // For FastAPI validation errors, use the first error message
-        processedError.message = errorData.detail[0].msg;
       } else {
         // Si no hay mensaje del backend, usar mensaje personalizado
         processedError.message = this.getHttpErrorMessage(status, context);
@@ -210,6 +225,33 @@ class ErrorHandler {
     }
     
     return this.errorMessages.default;
+  }
+
+  /**
+   * Generate specific suggestions for FastAPI validation errors
+   */
+  generateFastAPISuggestions(error, fieldName) {
+    console.log('DEBUG: generateFastAPISuggestions called with:', { error, fieldName });
+    const suggestions = [];
+    
+    if (error.type === 'value_error') {
+      if (error.msg.includes('email')) {
+        suggestions.push('Please enter a valid email address');
+        if (error.ctx?.reason) {
+          suggestions.push(`Email validation: ${error.ctx.reason}`);
+        }
+      } else if (error.msg.includes('password')) {
+        suggestions.push('Please enter a valid password');
+      } else if (error.msg.includes('required')) {
+        suggestions.push(`The ${fieldName} field is required`);
+      } else {
+        // Use the original message for other validation errors
+        suggestions.push(error.msg);
+      }
+    }
+    
+    console.log('DEBUG: Final FastAPI suggestions:', suggestions);
+    return suggestions.length > 0 ? suggestions : ['Please check your input and try again'];
   }
 
   /**
