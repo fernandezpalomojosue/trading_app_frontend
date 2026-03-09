@@ -4,7 +4,7 @@ import { handleError } from '../utils/errorHandler';
 const api = apiClient;
 
 export const authService = {
-  // Login de usuario
+  // User login
   login: async (credentials) => {
     try {
       const formData = new URLSearchParams();
@@ -28,7 +28,7 @@ export const authService = {
     }
   },
 
-  // Registro de usuario
+  // User registration
   register: async (userData) => {
     try {
       const response = await api.post('/auth/register', userData);
@@ -44,7 +44,7 @@ export const authService = {
     }
   },
 
-  // Verificar token
+  // Verify token
   verifyToken: async () => {
     try {
       const response = await api.get('/auth/me');
