@@ -63,6 +63,7 @@ const Register = () => {
       });
       navigate('/');
     } catch (err) {
+      console.log('DEBUG: Register.jsx error:', err);
       // Error ya manejado en el contexto
     } finally {
       setIsLoading(false);
