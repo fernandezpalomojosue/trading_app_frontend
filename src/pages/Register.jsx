@@ -28,17 +28,17 @@ const Register = () => {
 
   const validateForm = () => {
     if (formData.password !== formData.confirmPassword) {
-      setValidationError('Las contraseñas no coinciden');
+      setValidationError('Passwords do not match');
       return false;
     }
     
     if (formData.password.length < 8) {
-      setValidationError('La contraseña debe tener al menos 8 caracteres');
+      setValidationError('Password must be at least 8 characters long');
       return false;
     }
     
     if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      setValidationError('La contraseña debe contener al menos una mayúscula, una minúscula y un número');
+      setValidationError('Password must contain at least one uppercase letter, one lowercase letter and one number');
       return false;
     }
     
@@ -74,12 +74,12 @@ const Register = () => {
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Crear Cuenta
+            Create Account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            ¿Ya tienes cuenta?{' '}
+            Already have an account?{' '}
             <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
-              Inicia sesión aquí
+              Sign in here
             </Link>
           </p>
         </div>
@@ -99,7 +99,7 @@ const Register = () => {
           <div className="space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Nombre completo
+                Full name
               </label>
               <input
                 id="name"
@@ -110,13 +110,13 @@ const Register = () => {
                 value={formData.name}
                 onChange={handleChange}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Tu nombre"
+                placeholder="Your name"
               />
             </div>
             
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Correo electrónico
+                Email address
               </label>
               <input
                 id="email"
@@ -127,13 +127,13 @@ const Register = () => {
                 value={formData.email}
                 onChange={handleChange}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="tu@email.com"
+                placeholder="your@email.com"
               />
             </div>
             
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Contraseña
+                Password
               </label>
               <div className="mt-1 relative">
                 <input
@@ -145,7 +145,7 @@ const Register = () => {
                   value={formData.password}
                   onChange={handleChange}
                   className="appearance-none relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Mínimo 8 caracteres, mayúscula y número"
+                  placeholder="Minimum 8 characters, uppercase and number"
                 />
                 <button
                   type="button"
@@ -163,7 +163,7 @@ const Register = () => {
             
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirmar contraseña
+                Confirm password
               </label>
               <div className="mt-1 relative">
                 <input
@@ -175,7 +175,7 @@ const Register = () => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   className="appearance-none relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                  placeholder="Repite tu contraseña"
+                  placeholder="Repeat your password"
                 />
                 <button
                   type="button"
@@ -198,7 +198,7 @@ const Register = () => {
               disabled={isLoading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? 'Creando cuenta...' : 'Crear Cuenta'}
+              {isLoading ? 'Creating account...' : 'Create Account'}
             </button>
           </div>
         </form>

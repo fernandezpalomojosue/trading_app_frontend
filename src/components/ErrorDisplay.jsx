@@ -18,13 +18,13 @@ const ErrorDisplay = ({
 }) => {
   if (!error) return null;
 
-  console.log('ErrorDisplay received error:', error);
-  console.log('Error message:', error.message);
-  console.log('Error type:', error.type);
-  console.log('Error suggestions:', error.suggestions);
+  // Asegurarse de que el error tenga las propiedades necesarias
+  const errorMessage = error.message || 'Ocurrió un error inesperado';
+  const errorType = error.type || 'default';
+  const errorSuggestions = error.suggestions || [];
 
   const getErrorIcon = () => {
-    switch (error.type) {
+    switch (errorType) {
       case 'network':
         return <WifiOff className="h-5 w-5 text-red-400" />;
       case 'timeout':
@@ -35,13 +35,13 @@ const ErrorDisplay = ({
   };
 
   const getErrorTypeLabel = () => {
-    switch (error.type) {
+    switch (errorType) {
       case 'network':
-        return 'Error de conexión';
+        return 'Connection Error';
       case 'timeout':
-        return 'Tiempo de espera agotado';
+        return 'Timeout Error';
       case 'validation':
-        return 'Error de validación';
+        return 'Validation Error';
       default:
         return 'Error';
     }
@@ -60,16 +60,16 @@ const ErrorDisplay = ({
                 {getErrorTypeLabel()}
               </h3>
               <p className="mt-1 text-sm text-red-700">
-                {error.message}
+                {errorMessage}
               </p>
               
-              {showSuggestions && error.suggestions && error.suggestions.length > 0 && (
+              {showSuggestions && errorSuggestions.length > 0 && (
                 <div className="mt-3">
                   <p className="text-sm font-medium text-red-800 mb-2">
-                    ¿Qué puedes hacer?
+                    What can you do?
                   </p>
                   <ul className="list-disc list-inside space-y-1">
-                    {error.suggestions.map((suggestion, index) => (
+                    {errorSuggestions.map((suggestion, index) => (
                       <li key={index} className="text-sm text-red-700">
                         {suggestion}
                       </li>
@@ -86,17 +86,17 @@ const ErrorDisplay = ({
                     className="inline-flex items-center px-3 py-1.5 border border-red-300 text-sm font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
                     <RefreshCw className="h-4 w-4 mr-1" />
-                    Reintentar
+                    Retry
                   </button>
                 )}
                 
-                {error.type === 'network' && (
+                {errorType === 'network' && (
                   <button
                     onClick={() => window.location.reload()}
                     className="inline-flex items-center px-3 py-1.5 border border-red-300 text-sm font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
                     <RefreshCw className="h-4 w-4 mr-1" />
-                    Recargar página
+                    Reload Page
                   </button>
                 )}
                 
@@ -105,7 +105,7 @@ const ErrorDisplay = ({
                     onClick={onDismiss}
                     className="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                   >
-                    Cerrar
+                    Close
                   </button>
                 )}
               </div>

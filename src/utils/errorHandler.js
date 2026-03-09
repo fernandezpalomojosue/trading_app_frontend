@@ -5,73 +5,73 @@
 class ErrorHandler {
   constructor() {
     this.errorMessages = {
-      // Errores de autenticación
+      // Authentication errors
       401: {
-        default: 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.',
-        login: 'Correo electrónico o contraseña incorrectos. Verifica tus datos e intenta de nuevo.',
-        register: 'No se pudo crear tu cuenta. Por favor, intenta más tarde.',
-        token: 'Tu sesión no es válida. Inicia sesión nuevamente para continuar.'
+        default: 'Your session has expired. Please log in again.',
+        login: 'Incorrect email or password. Please verify your credentials and try again.',
+        register: 'Could not create your account. Please try again later.',
+        token: 'Your session is invalid. Please log in again to continue.'
       },
       
-      // Errores de recurso no encontrado
+      // Resource not found errors
       404: {
-        default: 'El recurso solicitado no existe. Verifica la URL o contacta soporte.',
-        login: 'El servicio de inicio de sesión no está disponible. Intenta más tarde.',
-        register: 'El servicio de registro no está disponible. Intenta más tarde.',
-        token: 'El servicio de verificación no está disponible. Intenta más tarde.',
-        markets: 'Los datos de mercado no están disponibles en este momento.',
-        assets: 'No se encontraron activos con los criterios especificados.',
-        assetDetails: 'El activo solicitado no existe o no está disponible.',
-        candles: 'No hay datos de velas disponibles para este activo en el período seleccionado.'
+        default: 'The requested resource does not exist. Please check the URL or contact support.',
+        login: 'Login service is unavailable. Please try again later.',
+        register: 'Registration service is unavailable. Please try again later.',
+        token: 'Verification service is unavailable. Please try again later.',
+        markets: 'Market data is not available at this time.',
+        assets: 'No assets found with the specified criteria.',
+        assetDetails: 'The requested asset does not exist or is not available.',
+        candles: 'No candle data available for this asset in the selected period.'
       },
       
-      // Errores de permisos
+      // Permission errors
       403: {
-        default: 'No tienes permisos para realizar esta acción.',
-        login: 'Acceso denegado. Verifica tus credenciales.',
-        register: 'No se permite el registro en este momento.',
-        markets: 'No tienes acceso a estos datos de mercado.',
-        assets: 'No tienes permiso para ver estos activos.'
+        default: 'You do not have permission to perform this action.',
+        login: 'Access denied. Please verify your credentials.',
+        register: 'Registration is not allowed at this time.',
+        markets: 'You do not have access to this market data.',
+        assets: 'You do not have permission to view these assets.'
       },
       
-      // Errores de validación
+      // Validation errors
       422: {
-        default: 'Los datos proporcionados no son válidos. Revisa la información e intenta de nuevo.',
-        email: 'El correo electrónico ya está registrado o no es válido.',
-        password: 'La contraseña debe cumplir con los requisitos de seguridad.',
-        credentials: 'Las credenciales proporcionadas son incorrectas.'
+        default: 'The provided data is invalid. Please review the information and try again.',
+        email: 'The email is already registered or is invalid.',
+        password: 'The password must meet security requirements.',
+        credentials: 'The provided credentials are incorrect.'
       },
       
-      // Límite de velocidad
+      // Rate limit errors
       429: {
-        default: 'Has realizado demasiadas solicitudes. Espera unos minutos antes de intentar de nuevo.',
-        login: 'Demasiados intentos de inicio de sesión. Espera unos minutos antes de volver a intentarlo.',
-        register: 'Demasiados intentos de registro. Espera unos minutos antes de volver a intentarlo.'
+        default: 'You have made too many requests. Please wait a few minutes before trying again.',
+        login: 'Too many login attempts. Please wait a few minutes before trying again.',
+        register: 'Too many registration attempts. Please wait a few minutes before trying again.'
       },
       
-      // Errores del servidor
+      // Server errors
       500: {
-        default: 'El servidor está experimentando problemas. Intenta de nuevo en unos minutos.',
-        database: 'No se pudieron guardar tus cambios. Intenta de nuevo más tarde.'
+        default: 'The server is experiencing problems. Please try again in a few minutes.',
+        database: 'Your changes could not be saved. Please try again later.'
       },
       
-      // Servicio no disponible
+      // Service unavailable
       503: {
-        default: 'El servicio no está disponible temporalmente. Intenta de nuevo en unos minutos.',
-        login: 'El servicio de autenticación no está disponible. Intenta más tarde.',
-        register: 'El servicio de registro no está disponible. Intenta más tarde.',
-        markets: 'Los datos de mercado no están disponibles temporalmente.'
+        default: 'The service is temporarily unavailable. Please try again in a few minutes.',
+        login: 'Authentication service is unavailable. Please try again later.',
+        register: 'Registration service is unavailable. Please try again later.',
+        markets: 'Market data is temporarily unavailable.'
       },
       
-      // Errores de red
+      // Network errors
       network: {
-        default: 'No se pudo conectar con el servidor. Verifica tu conexión a internet.',
-        timeout: 'La conexión tardó demasiado. Intenta de nuevo.',
-        offline: 'Parece que no tienes conexión a internet.'
+        default: 'Could not connect to the server. Please check your internet connection.',
+        timeout: 'The connection took too long. Please try again.',
+        offline: 'It seems you have no internet connection.'
       },
       
-      // Errores generales
-      default: 'Ocurrió un error inesperado. Por favor, intenta de nuevo.'
+      // General errors
+      default: 'An unexpected error occurred. Please try again.'
     };
   }
 
@@ -89,14 +89,14 @@ class ErrorHandler {
       technical: error.message || 'Error desconocido'
     };
 
-    // Errores de red
+    // Network errors
     if (error.code === 'NETWORK_ERROR' || error.code === 'ERR_NETWORK') {
       processedError.message = this.errorMessages.network.default;
       processedError.type = 'network';
       processedError.suggestions = [
-        'Verifica tu conexión a internet',
-        'Intenta recargar la página',
-        'Si el problema persiste, contacta soporte técnico'
+        'Check your internet connection',
+        'Try reloading the page',
+        'If the problem persists, contact technical support'
       ];
       return processedError;
     }
@@ -106,9 +106,9 @@ class ErrorHandler {
       processedError.message = this.errorMessages.network.timeout;
       processedError.type = 'timeout';
       processedError.suggestions = [
-        'Verifica tu conexión a internet',
-        'Intenta de nuevo',
-        'Si el problema continúa, intenta más tarde'
+        'Check your internet connection',
+        'Try again',
+        'If the problem continues, try again later'
       ];
       return processedError;
     }
@@ -118,15 +118,21 @@ class ErrorHandler {
       const status = error.response.status;
       const errorData = error.response.data;
       
-      // Primero usar mensajes personalizados según status y contexto
-      const customMessage = this.getHttpErrorMessage(status, context);
-      if (customMessage !== this.errorMessages.default) {
-        processedError.message = customMessage;
-      } else if (errorData?.message) {
-        // Solo usar mensaje del backend si no hay mensaje personalizado
-        processedError.message = this.formatBackendMessage(errorData.message);
+      // Primero verificar si el backend proporciona un mensaje claro
+      if (errorData?.message) {
+        const backendMessage = this.formatBackendMessage(errorData.message);
+        
+        // Para errores 4xx, usar mensaje del backend si es claro y específico
+        if (status >= 400 && status < 500 && status !== 401) {
+          processedError.message = backendMessage;
+        } else {
+          // Para 401 y errores 5xx, preferir mensajes personalizados
+          const customMessage = this.getHttpErrorMessage(status, context);
+          processedError.message = customMessage !== this.errorMessages.default ? customMessage : backendMessage;
+        }
       } else {
-        processedError.message = this.errorMessages.default;
+        // Si no hay mensaje del backend, usar mensaje personalizado
+        processedError.message = this.getHttpErrorMessage(status, context);
       }
 
       // Errores de validación con detalles
@@ -152,17 +158,46 @@ class ErrorHandler {
    * Formatea mensajes del backend para que sean más amigables
    */
   formatBackendMessage(message) {
-    // Convertir mensajes técnicos a amigables
+    // Si el mensaje ya está en español y es claro, mantenerlo
+    const spanishMessages = [
+      'El correo electrónico ya está registrado',
+      'La contraseña es muy débil',
+      'El correo electrónico ya existe',
+      'La contraseña debe tener al menos',
+      'El campo es obligatorio',
+      'No se encontraron resultados',
+      'El recurso no fue encontrado',
+      'Acceso denegado',
+      'Permiso insuficiente'
+    ];
+    
+    // Si el mensaje ya está en español y es comprensible, mantenerlo
+    if (spanishMessages.some(spanishMsg => message.includes(spanishMsg))) {
+      return message;
+    }
+    
+    // Mensajes técnicos que necesitan traducción
     const messageMap = {
       'Invalid credentials': 'Las credenciales proporcionadas son incorrectas.',
-      'User already exists': 'Ya existe una cuenta con este correo electrónico.',
-      'Email already registered': 'Este correo electrónico ya está registrado.',
+      'User already exists': 'El usuario ya está registrado.',
+      'Email already exists': 'El correo electrónico ya está registrado.',
+      'Email already registered': 'El correo electrónico ya está registrado.',
       'Invalid email format': 'El formato del correo electrónico no es válido.',
       'Password too weak': 'La contraseña es muy débil. Debe contener mayúsculas, minúsculas y números.',
-      'Token expired': 'Tu sesión ha expirado. Inicia sesión nuevamente.',
-      'Invalid token': 'Tu sesión no es válida. Inicia sesión nuevamente.'
+      'Password must be at least 8 characters': 'La contraseña debe tener al menos 8 caracteres.',
+      'Field is required': 'Este campo es obligatorio.',
+      'Not Found': 'Recurso no encontrado.',
+      'Access denied': 'Acceso denegado.',
+      'Unauthorized': 'No autorizado.',
+      'Token expired': 'Tu sesión ha expirado.',
+      'Invalid token': 'Token inválido.',
+      'Too many requests': 'Has realizado demasiadas solicitudes.',
+      'Server error': 'Error del servidor.',
+      'Database error': 'Error en la base de datos.',
+      'Network error': 'Error de red.',
+      'Connection timeout': 'Tiempo de conexión agotado.'
     };
-
+    
     return messageMap[message] || message;
   }
 
@@ -242,42 +277,42 @@ class ErrorHandler {
     
     if (status === 401) {
       if (context === 'login') {
-        suggestions.push('Verifica que tu correo y contraseña sean correctos');
-        suggestions.push('Asegúrate de no tener bloqueada la cuenta');
+        suggestions.push('Verify that your email and password are correct');
+        suggestions.push('Make sure your account is not locked');
       } else {
-        suggestions.push('Inicia sesión nuevamente para continuar');
+        suggestions.push('Please log in again to continue');
       }
     } else if (status === 403) {
-      suggestions.push('Verifica que tienes los permisos necesarios');
-      suggestions.push('Contacta al administrador si crees que es un error');
+      suggestions.push('Verify that you have the necessary permissions');
+      suggestions.push('Contact the administrator if you believe this is an error');
     } else if (status === 404) {
       if (context === 'login' || context === 'register' || context === 'token') {
-        suggestions.push('El servicio de autenticación no está disponible');
-        suggestions.push('Intenta de nuevo en unos minutos');
-        suggestions.push('Si el problema persiste, contacta soporte técnico');
+        suggestions.push('Authentication service is not available');
+        suggestions.push('Try again in a few minutes');
+        suggestions.push('If the problem persists, contact technical support');
       } else if (context === 'markets' || context === 'assets' || context === 'assetDetails' || context === 'candles') {
-        suggestions.push('Verifica que los criterios de búsqueda sean correctos');
-        suggestions.push('Intenta con otros parámetros de búsqueda');
+        suggestions.push('Check that the search criteria are correct');
+        suggestions.push('Try with other search parameters');
       } else {
-        suggestions.push('Verifica la URL o los parámetros de la solicitud');
-        suggestions.push('El recurso solicitado puede no existir');
+        suggestions.push('Check the URL or request parameters');
+        suggestions.push('The requested resource may not exist');
       }
     } else if (status === 422) {
-      suggestions.push('Revisa que todos los campos estén completos');
-      suggestions.push('Verifica el formato de los datos ingresados');
+      suggestions.push('Make sure all fields are complete');
+      suggestions.push('Check the format of the entered data');
     } else if (status === 429) {
-      suggestions.push('Espera unos minutos antes de intentar de nuevo');
-      suggestions.push('Has superado el límite de solicitudes permitidas');
+      suggestions.push('Please wait a few minutes before trying again');
+      suggestions.push('You have exceeded the allowed request limit');
     } else if (status === 500) {
-      suggestions.push('Espera unos minutos e intenta de nuevo');
-      suggestions.push('Si el problema persiste, contacta soporte técnico');
+      suggestions.push('Please wait a few minutes and try again');
+      suggestions.push('If the problem persists, contact technical support');
     } else if (status === 503) {
-      suggestions.push('El servicio está en mantenimiento temporal');
-      suggestions.push('Intenta de nuevo en unos minutos');
-      suggestions.push('Revisa el estado del servicio en la página de estado');
+      suggestions.push('The service is temporarily under maintenance');
+      suggestions.push('Please try again in a few minutes');
+      suggestions.push('Check service status on the status page');
     } else {
-      suggestions.push('Intenta recargar la página');
-      suggestions.push('Verifica tu conexión a internet');
+      suggestions.push('Try reloading the page');
+      suggestions.push('Check your internet connection');
     }
     
     return suggestions;

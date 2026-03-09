@@ -44,35 +44,35 @@ const ErrorTestPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">Prueba de Manejo de Errores</h1>
+        <h1 className="text-2xl font-bold mb-6">Error Handling Test</h1>
         
         <div className="space-y-4 mb-8">
           <button
             onClick={test404Error}
             className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
           >
-            Probar Error 404 (Login no disponible)
+            Test 404 Error (Login unavailable)
           </button>
           
           <button
             onClick={test401Error}
             className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600"
           >
-            Probar Error 401 (Credenciales incorrectas)
+            Test 401 Error (Invalid credentials)
           </button>
           
           <button
             onClick={testNetworkError}
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
-            Probar Error de Red
+            Test Network Error
           </button>
           
           <button
             onClick={clearError}
             className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
           >
-            Limpiar Error
+            Clear Error
           </button>
         </div>
 

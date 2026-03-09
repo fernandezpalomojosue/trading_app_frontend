@@ -60,10 +60,6 @@ export const AuthProvider = ({ children }) => {
       
       return response;
     } catch (err) {
-      console.log('Error caught in AuthContext login:', err);
-      console.log('Error message:', err.message);
-      console.log('Error type:', err.type);
-      console.log('Error suggestions:', err.suggestions);
       setError(err);
       throw err;
     }
