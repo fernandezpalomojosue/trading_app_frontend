@@ -118,6 +118,9 @@ class ErrorHandler {
       const status = error.response.status;
       const errorData = error.response.data;
       
+      console.log('DEBUG: Error data received:', errorData);
+      console.log('DEBUG: Status:', status);
+      
       // Primero verificar si el backend proporciona un mensaje claro
       if (errorData?.message) {
         const backendMessage = this.formatBackendMessage(errorData.message);
@@ -132,6 +135,7 @@ class ErrorHandler {
         }
       } else if (status === 422 && errorData?.detail?.[0]?.msg) {
         // For FastAPI validation errors, use the first error message
+        console.log('DEBUG: Using FastAPI detail message:', errorData.detail[0].msg);
         processedError.message = errorData.detail[0].msg;
       } else {
         // Si no hay mensaje del backend, usar mensaje personalizado
@@ -216,9 +220,11 @@ class ErrorHandler {
    * Extrae sugerencias de errores de validación de FastAPI
    */
   extractFastAPIValidationSuggestions(detail) {
+    console.log('DEBUG: Processing FastAPI detail:', detail);
     const suggestions = [];
     
     detail.forEach(error => {
+      console.log('DEBUG: Processing error:', error);
       if (error.type === 'value_error') {
         if (error.msg.includes('email')) {
           suggestions.push('Please enter a valid email address');
@@ -237,6 +243,7 @@ class ErrorHandler {
       }
     });
     
+    console.log('DEBUG: Final suggestions:', suggestions);
     return suggestions.length > 0 ? suggestions : ['Please check your input and try again'];
   }
 
