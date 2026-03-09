@@ -59,3 +59,57 @@ describe('errorHandler - 404 errors', () => {
     expect(processedError.suggestions).toContain('Check the URL or request parameters');
   });
 });
+
+describe('errorHandler - FastAPI validation errors', () => {
+  it('should handle FastAPI email validation error with detail array', () => {
+    const error = {
+      response: {
+        status: 422,
+        data: {
+          detail: [
+            {
+              type: "value_error",
+              loc: ["body", "email"],
+              msg: "value is not a valid email address: The part after the @-sign is not valid. It should have a period.",
+              input: "Asdfghjkl0@sdfsd",
+              ctx: {
+                reason: "The part after the @-sign is not valid. It should have a period."
+              }
+            }
+          ]
+        }
+      }
+    };
+    
+    const processedError = handleError(error, 'register');
+    
+    expect(processedError.message).toBe("value is not a valid email address: The part after the @-sign is not valid. It should have a period.");
+    expect(processedError.suggestions).toContain('Please enter a valid email address');
+    expect(processedError.suggestions).toContain('Email validation: The part after the @-sign is not valid. It should have a period.');
+  });
+
+  it('should handle FastAPI required field validation error', () => {
+    const error = {
+      response: {
+        status: 422,
+        data: {
+          detail: [
+            {
+              type: "value_error",
+              loc: ["body", "email"],
+              msg: "field required",
+              ctx: {
+                reason: "This field cannot be empty"
+              }
+            }
+          ]
+        }
+      }
+    };
+    
+    const processedError = handleError(error, 'register');
+    
+    expect(processedError.message).toBe("field required");
+    expect(processedError.suggestions).toContain('The email field is required');
+  });
+});
