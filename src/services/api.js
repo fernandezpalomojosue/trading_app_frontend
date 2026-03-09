@@ -33,9 +33,8 @@ apiClient.interceptors.response.use(
         window.dispatchEvent(new CustomEvent('auth:unauthorized'));
       }
     }
-    // Process all errors through errorHandler for consistency
-    const processedError = handleError(error, 'api');
-    return Promise.reject(processedError);
+    // Let individual services handle error processing
+    return Promise.reject(error);
   }
 );
 
