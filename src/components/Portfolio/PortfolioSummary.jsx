@@ -1,8 +1,6 @@
 import React from 'react';
 
 const PortfolioSummary = ({ summary }) => {
-  console.log('DEBUG PortfolioSummary - summary received:', summary);
-  
   if (!summary) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
