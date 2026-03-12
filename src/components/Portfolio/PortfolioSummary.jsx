@@ -36,7 +36,7 @@ const PortfolioSummary = ({ summary }) => {
   const summaryCards = [
     {
       title: 'Total Portfolio Value',
-      value: formatCurrency(summary.total_potfolio_value || 0),
+      value: formatCurrency(summary.total_portfolio_value || 0),
       subtitle: 'All assets combined'
     },
     {
