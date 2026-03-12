@@ -105,7 +105,7 @@ describe('authService', () => {
       apiClient.post.mockRejectedValue(error);
 
       await expect(authService.login({ email: 'test@example.com', password: 'password' }))
-        .rejects.toThrow('Could not connect to the server. Please check your internet connection.');
+        .rejects.toThrow('Could not connect to server. Please check your internet connection.');
     });
   });
 
@@ -167,7 +167,7 @@ describe('authService', () => {
       apiClient.post.mockRejectedValue(error);
 
       await expect(authService.register({ email: 'test@example.com', password: 'password' }))
-        .rejects.toThrow('Could not connect to the server. Please check your internet connection.');
+        .rejects.toThrow('Could not connect to server. Please check your internet connection.');
     });
   });
 
@@ -204,7 +204,7 @@ describe('authService', () => {
       
       localStorage.setItem('token', 'some-token');
 
-      await expect(authService.verifyToken()).rejects.toThrow('Could not connect to the server. Please check your internet connection.');
+      await expect(authService.verifyToken()).rejects.toThrow('Could not connect to server. Please check your internet connection.');
       expect(localStorage.getItem('token')).toBeNull();
     });
   });
