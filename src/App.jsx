@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import MarketOverview from './pages/MarketOverview';
 import AssetsList from './pages/AssetsList';
 import AssetDetail from './pages/AssetDetail';
+import Portfolio from './pages/Portfolio';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ErrorTestPage from './pages/ErrorTestPage';
@@ -24,6 +25,11 @@ function App() {
               <Route path="/" element={
                 <ProtectedRoute>
                   <MarketOverview />
+                </ProtectedRoute>
+              } />
+              <Route path="/portfolio" element={
+                <ProtectedRoute>
+                  <Portfolio />
                 </ProtectedRoute>
               } />
               <Route path="/assets" element={

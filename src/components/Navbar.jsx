@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { TrendingUp, BarChart3, User, LogOut, Menu, X } from 'lucide-react';
+import { TrendingUp, BarChart3, User, LogOut, Menu, X, Briefcase } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 const Navbar = () => {
@@ -32,6 +32,13 @@ const Navbar = () => {
                 >
                   <BarChart3 className="h-5 w-5" />
                   <span>Overview</span>
+                </Link>
+                <Link
+                  to="/portfolio"
+                  className="flex items-center space-x-2 text-gray-600 hover:text-green-600 transition-colors"
+                >
+                  <Briefcase className="h-5 w-5" />
+                  <span>Portfolio</span>
                 </Link>
                 <Link
                   to="/assets"
@@ -100,6 +107,14 @@ const Navbar = () => {
                   >
                     <BarChart3 className="h-5 w-5" />
                     <span>Overview</span>
+                  </Link>
+                  <Link
+                    to="/portfolio"
+                    className="flex items-center space-x-2 text-gray-600 hover:text-green-600 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Briefcase className="h-5 w-5" />
+                    <span>Portfolio</span>
                   </Link>
                   <Link
                     to="/assets"

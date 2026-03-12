@@ -299,14 +299,10 @@ class ErrorHandler {
     const suggestions = [];
     
     if (status === 401) {
-      if (context === 'login') {
-        suggestions.push('Verify that your email and password are correct');
-        suggestions.push('Make sure your account is not locked');
-      } else {
-        suggestions.push('Please log in again to continue');
-      }
+      suggestions.push('Verify your email and password');
+      suggestions.push('If you forgot your password, you can reset it');
     } else if (status === 403) {
-      suggestions.push('Verify that you have the necessary permissions');
+      suggestions.push('Ensure you have the necessary permissions');
       suggestions.push('Contact the administrator if you believe this is an error');
     } else if (status === 404) {
       if (context === 'login' || context === 'register' || context === 'token') {
@@ -316,6 +312,10 @@ class ErrorHandler {
       } else if (context === 'markets' || context === 'assets' || context === 'assetDetails' || context === 'candles') {
         suggestions.push('Check that the search criteria are correct');
         suggestions.push('Try with other search parameters');
+      } else if (context === 'portfolio') {
+        suggestions.push('Your portfolio data may not be available yet');
+        suggestions.push('Try refreshing the page');
+        suggestions.push('If you just started trading, your portfolio may be empty');
       } else {
         suggestions.push('Check the URL or request parameters');
         suggestions.push('The requested resource may not exist');
