@@ -18,6 +18,8 @@ const Portfolio = () => {
     try {
       setError(null);
       
+      console.log('DEBUG: Fetching portfolio data...');
+      
       // Fetch all portfolio data in parallel
       const [summaryData, holdingsData, transactionsData] = await Promise.all([
         portfolioService.getPortfolioSummary(),
@@ -25,10 +27,13 @@ const Portfolio = () => {
         portfolioService.getTransactions()
       ]);
 
+      console.log('DEBUG: Portfolio data received:', { summaryData, holdingsData, transactionsData });
+
       setSummary(summaryData);
       setHoldings(holdingsData);
       setTransactions(transactionsData);
     } catch (err) {
+      console.log('DEBUG: Portfolio error:', err);
       setError(err);
     } finally {
       setLoading(false);
