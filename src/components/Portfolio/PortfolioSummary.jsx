@@ -46,8 +46,8 @@ const PortfolioSummary = ({ summary }) => {
     },
     {
       title: 'Unrealized P&L',
-      value: formatCurrency(summary.unrealized_pl || 0),
-      subtitle: formatPercentage(summary.unrealized_pl_percentage || 0)
+      value: formatCurrency(summary.total_unrealized_pnl || 0),
+      subtitle: formatPercentage(summary.unrealized_pnl_percentage || 0)
     }
   ];
 
