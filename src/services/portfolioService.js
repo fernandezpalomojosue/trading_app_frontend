@@ -33,5 +33,33 @@ export const portfolioService = {
       const processedError = handleError(error, 'portfolio');
       throw processedError;
     }
+  },
+
+  // Buy stocks (market order)
+  buyStock: async (symbol, quantity) => {
+    try {
+      const response = await apiClient.post('/portfolio/buy', {
+        symbol: symbol,
+        quantity: quantity
+      });
+      return response.data;
+    } catch (error) {
+      const processedError = handleError(error, 'portfolio');
+      throw processedError;
+    }
+  },
+
+  // Sell stocks (market order)
+  sellStock: async (symbol, quantity) => {
+    try {
+      const response = await apiClient.post('/portfolio/sell', {
+        symbol: symbol,
+        quantity: quantity
+      });
+      return response.data;
+    } catch (error) {
+      const processedError = handleError(error, 'portfolio');
+      throw processedError;
+    }
   }
 };

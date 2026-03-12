@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { marketService } from '../services/api';
-import { TrendingUp, TrendingDown, ArrowLeft, Activity, DollarSign } from 'lucide-react';
+import { portfolioService } from '../services/portfolioService';
+import { TrendingUp, TrendingDown, ArrowLeft, Activity, DollarSign, TrendingUp as BuyIcon, TrendingDown as SellIcon } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import BuyModal from '../components/Trading/BuyModal';
+import SellModal from '../components/Trading/SellModal';
+import ErrorDisplay from '../components/ErrorDisplay';
 
 const AssetDetail = () => {
   const { symbol } = useParams();
@@ -12,6 +16,12 @@ const AssetDetail = () => {
   const [candles, setCandles] = useState([]);
   const [timespan, setTimespan] = useState('day');
   const [chartLoading, setChartLoading] = useState(false);
+  
+  // Trading state
+  const [buyModalOpen, setBuyModalOpen] = useState(false);
+  const [sellModalOpen, setSellModalOpen] = useState(false);
+  const [userHoldings, setUserHoldings] = useState(null);
+  const [tradingError, setTradingError] = useState(null);
 
   useEffect(() => {
     const fetchAssetDetails = async () => {
@@ -26,6 +36,22 @@ const AssetDetail = () => {
       }
     };
 
+    const fetchUserHoldings = async () => {
+      try {
+        const holdings = await portfolioService.getHoldings();
+        const userHolding = holdings.find(h => h.symbol === symbol);
+        setUserHoldings(userHolding);
+      } catch (err) {
+        // Don't set main error for holdings fetch failure
+        console.error('Failed to fetch user holdings:', err);
+      }
+    };
+
+    fetchAssetDetails();
+    fetchUserHoldings();
+  }, [symbol]);
+
+  useEffect(() => {
     const fetchCandles = async () => {
       try {
         setChartLoading(true);
@@ -68,10 +94,40 @@ const AssetDetail = () => {
     };
 
     if (symbol) {
-      fetchAssetDetails();
       fetchCandles();
     }
   }, [symbol, timespan]);
+
+  // Trading functions
+  const handleBuy = async (symbol, quantity) => {
+    try {
+      await portfolioService.buyStock(symbol, quantity);
+      setTradingError(null);
+      // Refresh user holdings
+      const holdings = await portfolioService.getHoldings();
+      const userHolding = holdings.find(h => h.symbol === symbol);
+      setUserHoldings(userHolding);
+      return { success: true };
+    } catch (err) {
+      setTradingError(err);
+      throw err;
+    }
+  };
+
+  const handleSell = async (symbol, quantity) => {
+    try {
+      await portfolioService.sellStock(symbol, quantity);
+      setTradingError(null);
+      // Refresh user holdings
+      const holdings = await portfolioService.getHoldings();
+      const userHolding = holdings.find(h => h.symbol === symbol);
+      setUserHoldings(userHolding);
+      return { success: true };
+    } catch (err) {
+      setTradingError(err);
+      throw err;
+    }
+  };
 
   if (loading) {
     return (
@@ -122,6 +178,32 @@ const AssetDetail = () => {
             }`}>
               {asset.details?.market_data?.change > 0 ? '+' : ''}{asset.details?.market_data?.change?.toFixed(2)} ({asset.details?.market_data?.change_percent?.toFixed(2)}%)
             </p>
+            
+            {/* Trading Buttons */}
+            <div className="flex space-x-2 mt-3">
+              <button
+                onClick={() => setBuyModalOpen(true)}
+                className="flex items-center space-x-1 px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors text-sm font-medium"
+              >
+                <BuyIcon className="h-4 w-4" />
+                <span>Buy</span>
+              </button>
+              <button
+                onClick={() => setSellModalOpen(true)}
+                className="flex items-center space-x-1 px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm font-medium"
+                disabled={!userHoldings || userHoldings.quantity <= 0}
+              >
+                <SellIcon className="h-4 w-4" />
+                <span>Sell</span>
+              </button>
+            </div>
+            
+            {/* User Holdings Info */}
+            {userHoldings && userHoldings.quantity > 0 && (
+              <div className="mt-2 text-xs text-gray-500">
+                You own {userHoldings.quantity.toFixed(6)} shares
+              </div>
+            )}
           </div>
         </div>
 
@@ -320,6 +402,31 @@ const AssetDetail = () => {
           </ResponsiveContainer>
         )}
       </div>
+
+      {/* Trading Error Display */}
+      {tradingError && (
+        <ErrorDisplay 
+          error={tradingError} 
+          onDismiss={() => setTradingError(null)}
+          className="mb-6"
+        />
+      )}
+
+      {/* Trading Modals */}
+      <BuyModal
+        isOpen={buyModalOpen}
+        onClose={() => setBuyModalOpen(false)}
+        asset={asset}
+        onBuySuccess={handleBuy}
+      />
+
+      <SellModal
+        isOpen={sellModalOpen}
+        onClose={() => setSellModalOpen(false)}
+        asset={asset}
+        userHoldings={userHoldings}
+        onSellSuccess={handleSell}
+      />
     </div>
   );
 };
