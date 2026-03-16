@@ -100,16 +100,16 @@ const HoldingsList = ({ holdings }) => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-900">
-                    {formatCurrency(holding.market_value)}
+                    {formatCurrency(holding.total_value)}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm">
-                    <div className={holding.unrealized_pl >= 0 ? 'text-green-600' : 'text-red-600'}>
-                      {formatCurrency(holding.unrealized_pl)}
+                    <div className={holding.unrealized_pnl >= 0 ? 'text-green-600' : 'text-red-600'}>
+                      {formatCurrency(holding.unrealized_pnl)}
                     </div>
                     <div className="text-xs text-gray-500">
-                      {formatPercentage(holding.unrealized_pl_percentage)}
+                      {formatPercentage(holding.pnl_percentage)}
                     </div>
                   </div>
                 </td>
