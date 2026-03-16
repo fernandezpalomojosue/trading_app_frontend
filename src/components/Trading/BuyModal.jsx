@@ -29,7 +29,7 @@ const BuyModal = ({ isOpen, onClose, asset, onBuySuccess }) => {
     setLoading(true);
     
     try {
-      const result = await onBuySuccess(asset.symbol, parseFloat(quantity));
+      const result = await onBuySuccess(asset.symbol, parseFloat(quantity), currentPrice);
       onClose();
       setQuantity('');
     } catch (err) {

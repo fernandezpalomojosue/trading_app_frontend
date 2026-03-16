@@ -99,9 +99,9 @@ const AssetDetail = () => {
   }, [symbol, timespan]);
 
   // Trading functions
-  const handleBuy = async (symbol, quantity) => {
+  const handleBuy = async (symbol, quantity, price) => {
     try {
-      await portfolioService.buyStock(symbol, quantity);
+      await portfolioService.buyStock(symbol, quantity, price);
       setTradingError(null);
       // Refresh user holdings
       const holdings = await portfolioService.getHoldings();
@@ -114,9 +114,9 @@ const AssetDetail = () => {
     }
   };
 
-  const handleSell = async (symbol, quantity) => {
+  const handleSell = async (symbol, quantity, price) => {
     try {
-      await portfolioService.sellStock(symbol, quantity);
+      await portfolioService.sellStock(symbol, quantity, price);
       setTradingError(null);
       // Refresh user holdings
       const holdings = await portfolioService.getHoldings();

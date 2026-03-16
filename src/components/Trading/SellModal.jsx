@@ -42,7 +42,7 @@ const SellModal = ({ isOpen, onClose, asset, userHoldings, onSellSuccess }) => {
     setLoading(true);
     
     try {
-      const result = await onSellSuccess(asset.symbol, parseFloat(quantity));
+      const result = await onSellSuccess(asset.symbol, parseFloat(quantity), currentPrice);
       onClose();
       setQuantity('');
     } catch (err) {

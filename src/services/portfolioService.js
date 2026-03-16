@@ -36,11 +36,12 @@ export const portfolioService = {
   },
 
   // Buy stocks (market order)
-  buyStock: async (symbol, quantity) => {
+  buyStock: async (symbol, quantity, price) => {
     try {
       const response = await apiClient.post('/portfolio/buy', {
         symbol: symbol,
-        quantity: quantity
+        quantity: quantity,
+        price: price
       });
       return response.data;
     } catch (error) {
@@ -50,11 +51,12 @@ export const portfolioService = {
   },
 
   // Sell stocks (market order)
-  sellStock: async (symbol, quantity) => {
+  sellStock: async (symbol, quantity, price) => {
     try {
       const response = await apiClient.post('/portfolio/sell', {
         symbol: symbol,
-        quantity: quantity
+        quantity: quantity,
+        price: price
       });
       return response.data;
     } catch (error) {
