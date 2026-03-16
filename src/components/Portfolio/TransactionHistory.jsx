@@ -83,8 +83,8 @@ const TransactionHistory = ({ transactions }) => {
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getTransactionTypeBg(transaction.type)} ${getTransactionTypeColor(transaction.type)}`}>
-                    {transaction.type}
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getTransactionTypeBg(transaction.transaction_type)} ${getTransactionTypeColor(transaction.transaction_type)}`}>
+                    {transaction.transaction_type}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">

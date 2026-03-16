@@ -24,11 +24,14 @@ const PortfolioSummary = ({ summary }) => {
   };
 
   const formatPercentage = (percentage) => {
+    if (percentage === undefined || percentage === null || isNaN(percentage)) {
+      return <span className="text-gray-600">0.00%</span>;
+    }
     const sign = percentage >= 0 ? '+' : '';
     const color = percentage >= 0 ? 'text-green-600' : 'text-red-600';
     return (
       <span className={color}>
-        {sign}{percentage.toFixed(2)}%
+        {sign}{Number(percentage).toFixed(2)}%
       </span>
     );
   };
