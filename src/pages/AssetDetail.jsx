@@ -161,7 +161,7 @@ const AssetDetail = () => {
         className="inline-flex items-center space-x-2 text-gray-600 hover:text-green-600 transition-colors mb-6"
       >
         <ArrowLeft className="h-4 w-4" />
-        <span>Volver a Activos</span>
+        <span>Back to Assets</span>
       </Link>
 
       {/* Tarjeta principal */}
@@ -212,7 +212,7 @@ const AssetDetail = () => {
           <div className="bg-blue-50 p-4 rounded-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-blue-600 font-medium">Volumen</p>
+                <p className="text-sm text-blue-600 font-medium">Daily Volume</p>
                 <p className="text-2xl font-bold text-blue-800">{asset.details?.market_data?.volume?.toLocaleString()}</p>
               </div>
               <Activity className="h-8 w-8 text-blue-600" />
@@ -222,7 +222,7 @@ const AssetDetail = () => {
           <div className="bg-green-50 p-4 rounded-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-green-600 font-medium">Cambio Diario</p>
+                <p className="text-sm text-green-600 font-medium">Daily Change</p>
                 <p className={`text-2xl font-bold ${
                   asset.details?.market_data?.change > 0 ? 'text-green-800' : 'text-red-800'
                 }`}>
@@ -240,7 +240,7 @@ const AssetDetail = () => {
           <div className="bg-purple-50 p-4 rounded-lg">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-purple-600 font-medium">% Cambio</p>
+                <p className="text-sm text-purple-600 font-medium">% Change</p>
                 <p className={`text-2xl font-bold ${
                   asset.details?.market_data?.change_percent > 0 ? 'text-purple-800' : 'text-red-800'
                 }`}>
@@ -254,23 +254,23 @@ const AssetDetail = () => {
 
         {/* Información adicional */}
         <div className="mt-6 pt-6 border-t border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Información del Activo</h3>
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">Asset Information</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <p className="text-sm text-gray-500">Moneda</p>
+              <p className="text-sm text-gray-500">Currency</p>
               <p className="font-medium text-gray-800">{asset.currency?.toUpperCase()}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Estado</p>
+              <p className="text-sm text-gray-500">Status</p>
               <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                 asset.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
               }`}>
-                {asset.active ? 'Activo' : 'Inactivo'}
+                {asset.active ? 'Active' : 'Inactive'}
               </span>
             </div>
             {asset.details?.market_cap && (
               <div>
-                <p className="text-sm text-gray-500">Capitalización</p>
+                <p className="text-sm text-gray-500">Market Cap</p>
                 <p className="font-medium text-gray-800">${(asset.details.market_cap / 1000000000).toFixed(2)}B</p>
               </div>
             )}
