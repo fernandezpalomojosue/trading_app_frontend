@@ -13,6 +13,9 @@ const TransactionHistory = ({ transactions }) => {
   }
 
   const formatCurrency = (amount) => {
+    if (amount === undefined || amount === null || isNaN(amount)) {
+      return '$0.00';
+    }
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -22,6 +25,9 @@ const TransactionHistory = ({ transactions }) => {
   };
 
   const formatNumber = (num) => {
+    if (num === undefined || num === null || isNaN(num)) {
+      return '0.000000';
+    }
     return new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 6,

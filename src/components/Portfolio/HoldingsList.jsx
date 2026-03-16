@@ -13,6 +13,9 @@ const HoldingsList = ({ holdings }) => {
   }
 
   const formatCurrency = (amount) => {
+    if (amount === undefined || amount === null || isNaN(amount)) {
+      return '$0.00';
+    }
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -22,6 +25,9 @@ const HoldingsList = ({ holdings }) => {
   };
 
   const formatNumber = (num) => {
+    if (num === undefined || num === null || isNaN(num)) {
+      return '0.000000';
+    }
     return new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 6,
@@ -29,11 +35,14 @@ const HoldingsList = ({ holdings }) => {
   };
 
   const formatPercentage = (percentage) => {
+    if (percentage === undefined || percentage === null || isNaN(percentage)) {
+      return <span className="text-gray-600">0.00%</span>;
+    }
     const sign = percentage >= 0 ? '+' : '';
     const color = percentage >= 0 ? 'text-green-600' : 'text-red-600';
     return (
       <span className={color}>
-        {sign}{percentage.toFixed(2)}%
+        {sign}{Number(percentage).toFixed(2)}%
       </span>
     );
   };

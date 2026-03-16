@@ -1,6 +1,8 @@
 import React from 'react';
 
 const PortfolioSummary = ({ summary }) => {
+  console.log('DEBUG PortfolioSummary - summary:', summary);
+  
   if (!summary) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -15,6 +17,10 @@ const PortfolioSummary = ({ summary }) => {
   }
 
   const formatCurrency = (amount) => {
+    console.log('DEBUG formatCurrency - amount:', amount, 'type:', typeof amount);
+    if (amount === undefined || amount === null || isNaN(amount)) {
+      return '$0.00';
+    }
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -24,6 +30,7 @@ const PortfolioSummary = ({ summary }) => {
   };
 
   const formatPercentage = (percentage) => {
+    console.log('DEBUG formatPercentage - percentage:', percentage, 'type:', typeof percentage);
     if (percentage === undefined || percentage === null || isNaN(percentage)) {
       return <span className="text-gray-600">0.00%</span>;
     }
@@ -39,18 +46,30 @@ const PortfolioSummary = ({ summary }) => {
   const summaryCards = [
     {
       title: 'Total Portfolio Value',
-      value: formatCurrency(summary.total_portfolio_value || 0),
+      value: (() => {
+        console.log('DEBUG - total_portfolio_value:', summary.total_portfolio_value);
+        return formatCurrency(summary.total_portfolio_value || 0);
+      })(),
       subtitle: 'All assets combined'
     },
     {
       title: 'Cash Balance',
-      value: formatCurrency(summary.cash_balance || 0),
+      value: (() => {
+        console.log('DEBUG - cash_balance:', summary.cash_balance);
+        return formatCurrency(summary.cash_balance || 0);
+      })(),
       subtitle: 'Available for trading'
     },
     {
       title: 'Unrealized P&L',
-      value: formatCurrency(summary.total_unrealized_pnl || 0),
-      subtitle: formatPercentage(summary.unrealized_pnl_percentage || 0)
+      value: (() => {
+        console.log('DEBUG - total_unrealized_pnl:', summary.total_unrealized_pnl);
+        return formatCurrency(summary.total_unrealized_pnl || 0);
+      })(),
+      subtitle: (() => {
+        console.log('DEBUG - unrealized_pnl_percentage:', summary.unrealized_pnl_percentage);
+        return formatPercentage(summary.unrealized_pnl_percentage || 0);
+      })()
     }
   ];
 
