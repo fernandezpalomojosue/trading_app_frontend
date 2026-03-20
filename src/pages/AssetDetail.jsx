@@ -172,11 +172,11 @@ const AssetDetail = () => {
             <p className="text-lg text-gray-600">{asset.name}</p>
           </div>
           <div className="text-right">
-            <p className="text-3xl font-bold text-gray-800">${asset.details?.market_data?.price?.toFixed(2)}</p>
+            <p className="text-3xl font-bold text-gray-800">${asset.price?.toFixed(2)}</p>
             <p className={`text-lg font-semibold ${
-              asset.details?.market_data?.change > 0 ? 'text-green-600' : 'text-red-600'
+              asset.change > 0 ? 'text-green-600' : 'text-red-600'
             }`}>
-              {asset.details?.market_data?.change > 0 ? '+' : ''}{asset.details?.market_data?.change?.toFixed(2)} ({asset.details?.market_data?.change_percent?.toFixed(2)}%)
+              {asset.change > 0 ? '+' : ''}{asset.change?.toFixed(2)} ({asset.change_percent?.toFixed(2)}%)
             </p>
             
             {/* Trading Buttons */}
@@ -213,7 +213,7 @@ const AssetDetail = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-blue-600 font-medium">Daily Volume</p>
-                <p className="text-2xl font-bold text-blue-800">{asset.details?.market_data?.volume?.toLocaleString()}</p>
+                <p className="text-2xl font-bold text-blue-800">{asset.volume?.toLocaleString()}</p>
               </div>
               <Activity className="h-8 w-8 text-blue-600" />
             </div>
@@ -224,12 +224,12 @@ const AssetDetail = () => {
               <div>
                 <p className="text-sm text-green-600 font-medium">Daily Change</p>
                 <p className={`text-2xl font-bold ${
-                  asset.details?.market_data?.change > 0 ? 'text-green-800' : 'text-red-800'
+                  asset.change > 0 ? 'text-green-800' : 'text-red-800'
                 }`}>
-                  {asset.details?.market_data?.change > 0 ? '+' : ''}{asset.details?.market_data?.change?.toFixed(2)}
+                  {asset.change > 0 ? '+' : ''}{asset.change?.toFixed(2)}
                 </p>
               </div>
-              {asset.details?.market_data?.change > 0 ? (
+              {asset.change > 0 ? (
                 <TrendingUp className="h-8 w-8 text-green-600" />
               ) : (
                 <TrendingDown className="h-8 w-8 text-red-600" />
@@ -242,9 +242,9 @@ const AssetDetail = () => {
               <div>
                 <p className="text-sm text-purple-600 font-medium">% Change</p>
                 <p className={`text-2xl font-bold ${
-                  asset.details?.market_data?.change_percent > 0 ? 'text-purple-800' : 'text-red-800'
+                  asset.change_percent > 0 ? 'text-purple-800' : 'text-red-800'
                 }`}>
-                  {asset.details?.market_data?.change_percent > 0 ? '+' : ''}{asset.details?.market_data?.change_percent?.toFixed(2)}%
+                  {asset.change_percent > 0 ? '+' : ''}{asset.change_percent?.toFixed(2)}%
                 </p>
               </div>
               <DollarSign className="h-8 w-8 text-purple-600" />
