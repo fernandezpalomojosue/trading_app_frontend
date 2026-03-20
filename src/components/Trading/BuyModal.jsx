@@ -6,7 +6,7 @@ const BuyModal = ({ isOpen, onClose, asset, onBuySuccess }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const currentPrice = asset?.details?.market_data?.price || 0;
+  const currentPrice = asset?.price || 0;
   const totalAmount = quantity && currentPrice ? quantity * currentPrice : 0;
 
   const formatCurrency = (amount) => {
