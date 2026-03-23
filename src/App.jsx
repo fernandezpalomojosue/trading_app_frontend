@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import MarketOverview from './pages/MarketOverview';
 import AssetsList from './pages/AssetsList';
 import AssetDetail from './pages/AssetDetail';
+import AdvancedChart from './pages/AdvancedChart';
 import Portfolio from './pages/Portfolio';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -40,6 +41,11 @@ function App() {
               <Route path="/assets/:symbol" element={
                 <ProtectedRoute>
                   <AssetDetail />
+                </ProtectedRoute>
+              } />
+              <Route path="/assets/:symbol/advanced-chart" element={
+                <ProtectedRoute>
+                  <AdvancedChart />
                 </ProtectedRoute>
               } />
             </Routes>

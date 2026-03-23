@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { marketService } from '../services/api';
 import { portfolioService } from '../services/portfolioService';
-import { TrendingUp, TrendingDown, ArrowLeft, Activity, DollarSign, TrendingUp as BuyIcon, TrendingDown as SellIcon } from 'lucide-react';
+import { TrendingUp, TrendingDown, ArrowLeft, Activity, DollarSign, TrendingUp as BuyIcon, TrendingDown as SellIcon, BarChart3 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import BuyModal from '../components/Trading/BuyModal';
 import SellModal from '../components/Trading/SellModal';
@@ -148,14 +148,14 @@ const AssetDetail = () => {
   if (!asset) {
     return (
       <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded">
-        Activo no encontrado
+        Asset not found
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      {/* Navegación */}
+      {/* Navigation */}
       <Link 
         to="/assets" 
         className="inline-flex items-center space-x-2 text-gray-600 hover:text-green-600 transition-colors mb-6"
@@ -164,7 +164,7 @@ const AssetDetail = () => {
         <span>Back to Assets</span>
       </Link>
 
-      {/* Tarjeta principal */}
+      {/* Main Card */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex items-start justify-between mb-6">
           <div>
@@ -207,7 +207,7 @@ const AssetDetail = () => {
           </div>
         </div>
 
-        {/* Métricas clave */}
+        {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-blue-50 p-4 rounded-lg">
             <div className="flex items-center justify-between">
@@ -306,11 +306,18 @@ const AssetDetail = () => {
         )}
       </div>
 
-      {/* Gráfico de precios */}
+      {/* Price Chart Section */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-gray-800">Gráfico de Precios</h3>
-          <div className="flex space-x-2">
+          <h3 className="text-lg font-semibold text-gray-800">Price Chart</h3>
+          <div className="flex items-center space-x-2">
+            <Link
+              to={`/assets/${symbol}/advanced-chart`}
+              className="flex items-center space-x-1 px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm font-medium"
+            >
+              <BarChart3 className="h-4 w-4" />
+              <span>Advanced Chart</span>
+            </Link>
             <button
               onClick={() => setTimespan('day')}
               className={`px-3 py-1 rounded text-sm font-medium ${
@@ -319,7 +326,7 @@ const AssetDetail = () => {
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              Día
+              Day
             </button>
             <button
               onClick={() => setTimespan('week')}
@@ -329,7 +336,7 @@ const AssetDetail = () => {
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              Semana
+              Week
             </button>
             <button
               onClick={() => setTimespan('month')}
@@ -339,7 +346,7 @@ const AssetDetail = () => {
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              Mes
+              Month
             </button>
             <button
               onClick={() => setTimespan('year')}
@@ -349,7 +356,7 @@ const AssetDetail = () => {
                   : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
               }`}
             >
-              Año
+              Year
             </button>
           </div>
         </div>
