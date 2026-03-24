@@ -73,7 +73,7 @@ const CandlestickChart = ({ data, height = 500 }) => {
   }, [height]);
 
   useEffect(() => {
-    if (!data || data.length === 0 || !candlestickSeriesRef.current || !volumeSeriesRef.current) return;
+    if (!data || !Array.isArray(data) || data.length === 0 || !candlestickSeriesRef.current || !volumeSeriesRef.current) return;
 
     // Format data for candlesticks
     const candleData = data.map(candle => ({
