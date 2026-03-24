@@ -8,7 +8,6 @@ import ErrorDisplay from '../components/ErrorDisplay';
 
 const AdvancedChart = () => {
   const { symbol } = useParams();
-  const [asset, setAsset] = useState(null);
   const [candles, setCandles] = useState([]);
   const [timespan, setTimespan] = useState('day');
   const [loading, setLoading] = useState(true);
@@ -34,13 +33,8 @@ const AdvancedChart = () => {
         setLoading(true);
         setError(null);
 
-        // Fetch asset details and candles
-        const [assetData, candlesData] = await Promise.all([
-          marketService.getAssetDetails(symbol),
-          marketService.getCandles(symbol, timespan),
-        ]);
-
-        setAsset(assetData);
+        // Fetch candles and indicators
+        const candlesData = await marketService.getCandles(symbol, timespan);
         setCandles(candlesData);
         
         // Fetch indicators
@@ -60,19 +54,26 @@ const AdvancedChart = () => {
       try {
         setIndicatorsLoading(true);
         
-        const [emaData, smaData, rsiData, macdData] = await Promise.all([
-          indicatorsService.getEMA(symbol, { timespan }),
-          indicatorsService.getSMA(symbol, { timespan }),
-          indicatorsService.getRSI(symbol, { timespan }),
-          indicatorsService.getMACD(symbol, { timespan }),
-        ]);
-
-        setIndicators({
-          ema: emaData,
-          sma: smaData,
-          rsi: rsiData,
-          macd: macdData,
-        });
+        // Fetch all indicators in a single call
+        const data = await indicatorsService.getAllIndicators(symbol, { timespan });
+        
+        if (data && data.results && data.results.length > 0) {
+          const lastResult = data.results[data.results.length - 1];
+          
+          setIndicators({
+            ema: { last_value: lastResult.ema },
+            sma: { last_value: lastResult.sma },
+            rsi: { last_value: lastResult.rsi },
+            macd: { 
+              last_value: {
+                macd: lastResult.macd,
+                signal: lastResult.signal,
+                histogram: lastResult.histogram,
+              }
+            },
+            history: data.results,
+          });
+        }
       } catch (err) {
         console.error('Failed to load indicators:', err);
         // Don't set error state, just log it - indicators are optional
@@ -107,9 +108,10 @@ const AdvancedChart = () => {
     );
   }
 
-  const currentPrice = asset?.details?.market_data?.price || 0;
-  const dailyChange = asset?.details?.market_data?.change || 0;
-  const dailyChangePercent = asset?.details?.market_data?.change_percent || 0;
+  const currentPrice = candles.length > 0 ? candles[candles.length - 1].close : 0;
+  const previousPrice = candles.length > 1 ? candles[candles.length - 2].close : currentPrice;
+  const dailyChange = currentPrice - previousPrice;
+  const dailyChangePercent = previousPrice > 0 ? (dailyChange / previousPrice) * 100 : 0;
 
   return (
     <div className="max-w-7xl mx-auto p-6 space-y-6">
@@ -267,17 +269,30 @@ const AdvancedChart = () => {
 
             {/* MACD */}
             <div className="bg-orange-50 rounded-lg p-4">
-              <p className="text-sm text-orange-600 font-medium">MACD</p>
-              <p className="text-lg font-semibold text-gray-900">
-                {indicators.macd?.last_value?.macd?.toFixed(3) || '--'}
-              </p>
-              {indicators.macd?.signal && (
-                <p className={`text-xs ${
-                  indicators.macd.signal === 'bullish' ? 'text-green-600' : 'text-red-600'
-                }`}>
-                  Signal: {indicators.macd.signal.toUpperCase()}
-                </p>
-              )}
+              <p className="text-sm text-orange-600 font-medium">MACD (12,26,9)</p>
+              <div className="space-y-1">
+                <div className="flex justify-between">
+                  <span className="text-xs text-gray-600">MACD:</span>
+                  <span className="text-sm font-semibold text-gray-900">
+                    {indicators.macd?.last_value?.macd?.toFixed(3) || '--'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-xs text-gray-600">Signal:</span>
+                  <span className="text-sm font-semibold text-gray-700">
+                    {indicators.macd?.last_value?.signal?.toFixed(3) || '--'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-xs text-gray-600">Histogram:</span>
+                  <span className={`text-sm font-semibold ${
+                    indicators.macd?.last_value?.histogram > 0 ? 'text-green-600' : 
+                    indicators.macd?.last_value?.histogram < 0 ? 'text-red-600' : 'text-gray-900'
+                  }`}>
+                    {indicators.macd?.last_value?.histogram?.toFixed(3) || '--'}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         )}
