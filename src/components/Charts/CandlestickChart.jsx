@@ -75,20 +75,20 @@ const CandlestickChart = ({ data, height = 500 }) => {
   useEffect(() => {
     if (!data || !Array.isArray(data) || data.length === 0 || !candlestickSeriesRef.current || !volumeSeriesRef.current) return;
 
-    // Format data for candlesticks
+    // Format data for candlesticks - support both formats (t/o/h/l/c/v and timestamp/open/high/low/close/volume)
     const candleData = data.map(candle => ({
-      time: Math.floor(candle.timestamp / 1000), // Convert ms to seconds
-      open: candle.open,
-      high: candle.high,
-      low: candle.low,
-      close: candle.close,
+      time: Math.floor((candle.t || candle.timestamp) / 1000), // Convert ms to seconds
+      open: candle.o ?? candle.open,
+      high: candle.h ?? candle.high,
+      low: candle.l ?? candle.low,
+      close: candle.c ?? candle.close,
     }));
 
     // Format data for volume (color based on close vs open)
     const volumeData = data.map(candle => ({
-      time: Math.floor(candle.timestamp / 1000),
-      value: candle.volume,
-      color: candle.close >= candle.open ? '#22c55e' : '#ef4444',
+      time: Math.floor((candle.t || candle.timestamp) / 1000),
+      value: candle.v ?? candle.volume,
+      color: (candle.c ?? candle.close) >= (candle.o ?? candle.open) ? '#22c55e' : '#ef4444',
     }));
 
     candlestickSeriesRef.current.setData(candleData);
