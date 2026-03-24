@@ -128,18 +128,16 @@ const AdvancedChart = () => {
         </div>
         <div className="text-right">
           <h1 className="text-3xl font-bold text-gray-900">{symbol}</h1>
-          {asset && (
-            <div className="flex items-center space-x-2 mt-1">
-              <span className="text-2xl font-semibold text-gray-800">
-                ${currentPrice.toFixed(2)}
-              </span>
-              <span className={`text-sm font-medium ${
-                dailyChange >= 0 ? 'text-green-600' : 'text-red-600'
-              }`}>
-                {dailyChange >= 0 ? '+' : ''}{dailyChange.toFixed(2)} ({dailyChangePercent.toFixed(2)}%)
-              </span>
-            </div>
-          )}
+          <div className="flex items-center space-x-2 mt-1">
+            <span className="text-2xl font-semibold text-gray-800">
+              ${currentPrice.toFixed(2)}
+            </span>
+            <span className={`text-sm font-medium ${
+              dailyChange >= 0 ? 'text-green-600' : 'text-red-600'
+            }`}>
+              {dailyChange >= 0 ? '+' : ''}{dailyChange.toFixed(2)} ({dailyChangePercent.toFixed(2)}%)
+            </span>
+          </div>
         </div>
       </div>
 
