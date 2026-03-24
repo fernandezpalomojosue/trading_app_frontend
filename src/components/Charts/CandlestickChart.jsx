@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { createChart, CrosshairMode } from 'lightweight-charts';
+import { createChart, CrosshairMode, CandlestickSeries, HistogramSeries } from 'lightweight-charts';
 
 const CandlestickChart = ({ data, height = 500 }) => {
   const chartContainerRef = useRef(null);
@@ -36,8 +36,8 @@ const CandlestickChart = ({ data, height = 500 }) => {
 
     chartRef.current = chart;
 
-    // Create candlestick series
-    const candlestickSeries = chart.addCandlestickSeries({
+    // Create candlestick series using correct v5 API: chart.addSeries(CandlestickSeries, options)
+    const candlestickSeries = chart.addSeries(CandlestickSeries, {
       upColor: '#22c55e',
       downColor: '#ef4444',
       borderUpColor: '#22c55e',
@@ -48,8 +48,8 @@ const CandlestickChart = ({ data, height = 500 }) => {
 
     candlestickSeriesRef.current = candlestickSeries;
 
-    // Create volume series (histogram)
-    const volumeSeries = chart.addHistogramSeries({
+    // Create volume series (histogram) using correct v5 API: chart.addSeries(HistogramSeries, options)
+    const volumeSeries = chart.addSeries(HistogramSeries, {
       color: '#26a69a',
       priceFormat: {
         type: 'volume',
@@ -77,7 +77,7 @@ const CandlestickChart = ({ data, height = 500 }) => {
 
     // Format data for candlesticks
     const candleData = data.map(candle => ({
-      time: candle.timestamp / 1000, // Convert ms to seconds
+      time: Math.floor(candle.timestamp / 1000), // Convert ms to seconds
       open: candle.open,
       high: candle.high,
       low: candle.low,
@@ -86,7 +86,7 @@ const CandlestickChart = ({ data, height = 500 }) => {
 
     // Format data for volume (color based on close vs open)
     const volumeData = data.map(candle => ({
-      time: candle.timestamp / 1000,
+      time: Math.floor(candle.timestamp / 1000),
       value: candle.volume,
       color: candle.close >= candle.open ? '#22c55e' : '#ef4444',
     }));
@@ -95,7 +95,9 @@ const CandlestickChart = ({ data, height = 500 }) => {
     volumeSeriesRef.current.setData(volumeData);
 
     // Fit content
-    chartRef.current.timeScale().fitContent();
+    if (chartRef.current) {
+      chartRef.current.timeScale().fitContent();
+    }
   }, [data]);
 
   return (
