@@ -103,7 +103,7 @@ const CandlestickChart = ({ data, height = 500 }) => {
   return (
     <div 
       ref={chartContainerRef} 
-      style={{ width: '100%', height: height }}
+      style={{ width: '100%', height: height, minWidth: '100%' }}
     />
   );
 };
