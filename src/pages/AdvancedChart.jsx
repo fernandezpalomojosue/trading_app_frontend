@@ -58,8 +58,8 @@ const AdvancedChart = () => {
         const candlesData = await marketService.getCandles(symbol, timespan, 1, limit, startDateStr, null);
         setCandles(candlesData);
         
-        // Fetch indicators with same limit
-        await fetchIndicators(startDateStr, limit);
+        // Fetch indicators with 100 points always
+        await fetchIndicators(startDateStr, 100, candlesData);
       } catch (err) {
         setError({
           type: 'network',
@@ -71,15 +71,15 @@ const AdvancedChart = () => {
       }
     };
 
-    const fetchIndicators = async (startDateStr, limit) => {
+    const fetchIndicators = async (startDateStr, indicatorLimit, candlesData) => {
       try {
         setIndicatorsLoading(true);
         
-        // Fetch all indicators with adjusted limit
+        // Fetch all indicators with 100 points
         const data = await indicatorsService.getAllIndicators(symbol, { 
           timespan,
           start_date: startDateStr,
-          limit: limit,
+          limit: indicatorLimit,
         });
         
         if (data && data.results && data.results.length > 0) {
@@ -97,6 +97,7 @@ const AdvancedChart = () => {
               }
             },
             history: data.results,
+            candleTimestamps: (candlesData.results || candlesData).map(c => c.t || c.timestamp),
           });
         }
       } catch (err) {
@@ -193,7 +194,7 @@ const AdvancedChart = () => {
 
       {/* Candlestick Chart */}
       <div className="bg-white rounded-lg shadow-lg p-6">
-        <CandlestickChart data={candles.results || candles} height={500} />
+        <CandlestickChart data={candles.results || candles} indicators={indicators} height={500} />
       </div>
 
       {/* Key Stats */}

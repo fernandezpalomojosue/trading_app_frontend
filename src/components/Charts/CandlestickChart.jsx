@@ -1,11 +1,13 @@
 import React, { useEffect, useRef } from 'react';
-import { createChart, CrosshairMode, CandlestickSeries, HistogramSeries } from 'lightweight-charts';
+import { createChart, CrosshairMode, CandlestickSeries, HistogramSeries, LineSeries } from 'lightweight-charts';
 
-const CandlestickChart = ({ data, height = 500 }) => {
+const CandlestickChart = ({ data, indicators, height = 500 }) => {
   const chartContainerRef = useRef(null);
   const chartRef = useRef(null);
   const candlestickSeriesRef = useRef(null);
   const volumeSeriesRef = useRef(null);
+  const emaSeriesRef = useRef(null);
+  const smaSeriesRef = useRef(null);
 
   useEffect(() => {
     if (!chartContainerRef.current) return;
@@ -67,6 +69,22 @@ const CandlestickChart = ({ data, height = 500 }) => {
       },
     });
 
+    // Create EMA line series
+    const emaSeries = chart.addSeries(LineSeries, {
+      color: '#f59e0b',
+      lineWidth: 2,
+      title: 'EMA',
+    });
+    emaSeriesRef.current = emaSeries;
+
+    // Create SMA line series
+    const smaSeries = chart.addSeries(LineSeries, {
+      color: '#3b82f6',
+      lineWidth: 2,
+      title: 'SMA',
+    });
+    smaSeriesRef.current = smaSeries;
+
     return () => {
       chart.remove();
     };
@@ -96,10 +114,36 @@ const CandlestickChart = ({ data, height = 500 }) => {
     candlestickSeriesRef.current.setData(candleData);
     volumeSeriesRef.current.setData(volumeData);
 
+    // Filter and plot indicators that match candle timestamps
+    if (indicators?.history && indicators.candleTimestamps && indicators.history.length > 0) {
+      const candleTimes = new Set(indicators.candleTimestamps.map(t => Math.floor(t / 1000)));
+      
+      const emaData = indicators.history
+        .map(item => ({
+          time: Math.floor((item.t || item.timestamp) / 1000),
+          value: item.ema,
+        }))
+        .filter(item => candleTimes.has(item.time) && item.value != null);
+
+      const smaData = indicators.history
+        .map(item => ({
+          time: Math.floor((item.t || item.timestamp) / 1000),
+          value: item.sma,
+        }))
+        .filter(item => candleTimes.has(item.time) && item.value != null);
+
+      if (emaSeriesRef.current && emaData.length > 0) {
+        emaSeriesRef.current.setData(emaData);
+      }
+      if (smaSeriesRef.current && smaData.length > 0) {
+        smaSeriesRef.current.setData(smaData);
+      }
+    }
+
     if (chartRef.current) {
       chartRef.current.timeScale().fitContent();
     }
-  }, [data]);
+  }, [data, indicators]);
 
   return (
     <div 
