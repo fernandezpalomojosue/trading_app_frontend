@@ -1,11 +1,15 @@
 import React, { useEffect, useRef } from 'react';
-import { createChart, CrosshairMode, CandlestickSeries, HistogramSeries } from 'lightweight-charts';
+import { createChart, CrosshairMode, CandlestickSeries, HistogramSeries, LineSeries } from 'lightweight-charts';
 
-const CandlestickChart = ({ data, height = 500 }) => {
+const CandlestickChart = ({ data, indicators, height = 500 }) => {
   const chartContainerRef = useRef(null);
   const chartRef = useRef(null);
   const candlestickSeriesRef = useRef(null);
   const volumeSeriesRef = useRef(null);
+  const emaSeriesRef = useRef(null);
+  const smaSeriesRef = useRef(null);
+  const macdSeriesRef = useRef(null);
+  const macdSignalSeriesRef = useRef(null);
 
   useEffect(() => {
     if (!chartContainerRef.current) return;
@@ -78,6 +82,49 @@ const CandlestickChart = ({ data, height = 500 }) => {
       },
     });
 
+    // Create EMA line series
+    const emaSeries = chart.addSeries(LineSeries, {
+      color: '#f59e0b',
+      lineWidth: 2,
+      title: 'EMA',
+      priceScaleId: 'right',
+    });
+    emaSeriesRef.current = emaSeries;
+
+    // Create SMA line series
+    const smaSeries = chart.addSeries(LineSeries, {
+      color: '#3b82f6',
+      lineWidth: 2,
+      title: 'SMA',
+      priceScaleId: 'right',
+    });
+    smaSeriesRef.current = smaSeries;
+
+    // Create MACD line series (on separate scale)
+    const macdSeries = chart.addSeries(LineSeries, {
+      color: '#8b5cf6',
+      lineWidth: 2,
+      title: 'MACD',
+      priceScaleId: 'macd',
+    });
+    macdSeriesRef.current = macdSeries;
+
+    const macdSignalSeries = chart.addSeries(LineSeries, {
+      color: '#ec4899',
+      lineWidth: 2,
+      title: 'Signal',
+      priceScaleId: 'macd',
+    });
+    macdSignalSeriesRef.current = macdSignalSeries;
+
+    // MACD scale at bottom
+    chart.priceScale('macd').applyOptions({
+      scaleMargins: {
+        top: 0.85,
+        bottom: 0.05,
+      },
+    });
+
     return () => {
       chart.remove();
     };
@@ -114,6 +161,37 @@ const CandlestickChart = ({ data, height = 500 }) => {
       chartRef.current.timeScale().fitContent();
     }
   }, [data]);
+
+  useEffect(() => {
+    // Update indicator lines when indicators change
+    if (!indicators?.history || indicators.history.length === 0) return;
+    if (!emaSeriesRef.current || !smaSeriesRef.current) return;
+
+    const emaData = indicators.history.map(item => ({
+      time: Math.floor((item.t || item.timestamp) / 1000),
+      value: item.ema,
+    })).filter(item => item.value != null);
+
+    const smaData = indicators.history.map(item => ({
+      time: Math.floor((item.t || item.timestamp) / 1000),
+      value: item.sma,
+    })).filter(item => item.value != null);
+
+    const macdData = indicators.history.map(item => ({
+      time: Math.floor((item.t || item.timestamp) / 1000),
+      value: item.macd,
+    })).filter(item => item.value != null);
+
+    const macdSignalData = indicators.history.map(item => ({
+      time: Math.floor((item.t || item.timestamp) / 1000),
+      value: item.signal,
+    })).filter(item => item.value != null);
+
+    if (emaSeriesRef.current) emaSeriesRef.current.setData(emaData);
+    if (smaSeriesRef.current) smaSeriesRef.current.setData(smaData);
+    if (macdSeriesRef.current) macdSeriesRef.current.setData(macdData);
+    if (macdSignalSeriesRef.current) macdSignalSeriesRef.current.setData(macdSignalData);
+  }, [indicators]);
 
   return (
     <div 

@@ -184,7 +184,7 @@ const AdvancedChart = () => {
 
       {/* Candlestick Chart */}
       <div className="bg-white rounded-lg shadow-lg p-6">
-        <CandlestickChart data={candles.results || candles} height={500} />
+        <CandlestickChart data={candles.results || candles} indicators={indicators} height={500} />
       </div>
 
       {/* Key Stats */}
