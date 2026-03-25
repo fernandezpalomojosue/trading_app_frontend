@@ -8,15 +8,7 @@ const CandlestickChart = ({ data, height = 500 }) => {
   const volumeSeriesRef = useRef(null);
 
   useEffect(() => {
-    if (!chartContainerRef.current) {
-      console.log('Chart container ref is null');
-      return;
-    }
-
-    console.log('Creating chart, container dimensions:', 
-      chartContainerRef.current.clientWidth, 
-      chartContainerRef.current.clientHeight
-    );
+    if (!chartContainerRef.current) return;
 
     // Create chart
     const chart = createChart(chartContainerRef.current, {
@@ -83,24 +75,14 @@ const CandlestickChart = ({ data, height = 500 }) => {
   }, [height]);
 
   useEffect(() => {
-    console.log('Data effect triggered, data:', data);
-    console.log('Is array:', Array.isArray(data));
-    console.log('Length:', data?.length);
+    // Handle both direct array and {results: array} format
+    const dataArray = data?.results || data;
     
-    if (!data || !Array.isArray(data) || data.length === 0) {
-      console.log('Data validation failed, returning early');
-      return;
-    }
-    
-    if (!candlestickSeriesRef.current || !volumeSeriesRef.current) {
-      console.log('Series refs not ready');
-      return;
-    }
-
-    console.log('Processing', data.length, 'candles');
+    if (!dataArray || !Array.isArray(dataArray) || dataArray.length === 0) return;
+    if (!candlestickSeriesRef.current || !volumeSeriesRef.current) return;
 
     // Format data for candlesticks - support both formats (t/o/h/l/c/v and timestamp/open/high/low/close/volume)
-    const candleData = data.map(candle => ({
+    const candleData = dataArray.map(candle => ({
       time: Math.floor((candle.t || candle.timestamp) / 1000), // Convert ms to seconds
       open: candle.o ?? candle.open,
       high: candle.h ?? candle.high,
@@ -108,25 +90,19 @@ const CandlestickChart = ({ data, height = 500 }) => {
       close: candle.c ?? candle.close,
     }));
 
-    console.log('First candle:', candleData[0]);
-    console.log('Last candle:', candleData[candleData.length - 1]);
-
     // Format data for volume (color based on close vs open)
-    const volumeData = data.map(candle => ({
+    const volumeData = dataArray.map(candle => ({
       time: Math.floor((candle.t || candle.timestamp) / 1000),
       value: candle.v ?? candle.volume,
       color: (candle.c ?? candle.close) >= (candle.o ?? candle.open) ? '#22c55e' : '#ef4444',
     }));
 
-    console.log('Setting data to series...');
     candlestickSeriesRef.current.setData(candleData);
     volumeSeriesRef.current.setData(volumeData);
-    console.log('Data set successfully');
 
     // Fit content
     if (chartRef.current) {
       chartRef.current.timeScale().fitContent();
-      console.log('Fitted content');
     }
   }, [data]);
 

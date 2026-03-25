@@ -108,8 +108,9 @@ const AdvancedChart = () => {
     );
   }
 
-  const lastClose = candles[candles.length - 1]?.c ?? candles[candles.length - 1]?.close ?? 0;
-  const prevClose = candles.length > 1 ? (candles[candles.length - 2]?.c ?? candles[candles.length - 2]?.close ?? lastClose) : lastClose;
+  const candleArray = candles.results || candles;
+  const lastClose = candleArray[candleArray.length - 1]?.c ?? candleArray[candleArray.length - 1]?.close ?? 0;
+  const prevClose = candleArray.length > 1 ? (candleArray[candleArray.length - 2]?.c ?? candleArray[candleArray.length - 2]?.close ?? lastClose) : lastClose;
   const dailyChange = lastClose - prevClose;
   const dailyChangePercent = prevClose > 0 ? (dailyChange / prevClose) * 100 : 0;
 
@@ -167,40 +168,40 @@ const AdvancedChart = () => {
 
       {/* Candlestick Chart */}
       <div className="bg-white rounded-lg shadow-lg p-6">
-        <CandlestickChart data={candles} height={500} />
+        <CandlestickChart data={candles.results || candles} height={500} />
       </div>
 
       {/* Key Stats */}
-      {candles.length > 0 && (
+      {(candles.results?.length || candles.length) > 0 && (
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           <div className="bg-gray-50 rounded-lg p-4">
             <p className="text-sm text-gray-600">Open</p>
             <p className="text-lg font-semibold text-gray-900">
-              ${(candles[candles.length - 1]?.o ?? candles[candles.length - 1]?.open)?.toFixed(2) || '0.00'}
+              ${((candles.results || candles)[(candles.results || candles).length - 1]?.o ?? (candles.results || candles)[(candles.results || candles).length - 1]?.open)?.toFixed(2) || '0.00'}
             </p>
           </div>
           <div className="bg-gray-50 rounded-lg p-4">
             <p className="text-sm text-gray-600">High</p>
             <p className="text-lg font-semibold text-gray-900">
-              ${(candles[candles.length - 1]?.h ?? candles[candles.length - 1]?.high)?.toFixed(2) || '0.00'}
+              ${((candles.results || candles)[(candles.results || candles).length - 1]?.h ?? (candles.results || candles)[(candles.results || candles).length - 1]?.high)?.toFixed(2) || '0.00'}
             </p>
           </div>
           <div className="bg-gray-50 rounded-lg p-4">
             <p className="text-sm text-gray-600">Low</p>
             <p className="text-lg font-semibold text-gray-900">
-              ${(candles[candles.length - 1]?.l ?? candles[candles.length - 1]?.low)?.toFixed(2) || '0.00'}
+              ${((candles.results || candles)[(candles.results || candles).length - 1]?.l ?? (candles.results || candles)[(candles.results || candles).length - 1]?.low)?.toFixed(2) || '0.00'}
             </p>
           </div>
           <div className="bg-gray-50 rounded-lg p-4">
             <p className="text-sm text-gray-600">Close</p>
             <p className="text-lg font-semibold text-gray-900">
-              ${(candles[candles.length - 1]?.c ?? candles[candles.length - 1]?.close)?.toFixed(2) || '0.00'}
+              ${((candles.results || candles)[(candles.results || candles).length - 1]?.c ?? (candles.results || candles)[(candles.results || candles).length - 1]?.close)?.toFixed(2) || '0.00'}
             </p>
           </div>
           <div className="bg-gray-50 rounded-lg p-4">
             <p className="text-sm text-gray-600">Volume</p>
             <p className="text-lg font-semibold text-gray-900">
-              {(candles[candles.length - 1]?.v ?? candles[candles.length - 1]?.volume)?.toLocaleString() || '0'}
+              {((candles.results || candles)[(candles.results || candles).length - 1]?.v ?? (candles.results || candles)[(candles.results || candles).length - 1]?.volume)?.toLocaleString() || '0'}
             </p>
           </div>
         </div>
