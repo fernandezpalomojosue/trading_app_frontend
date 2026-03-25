@@ -29,9 +29,9 @@ const RSIChart = ({ data, height = 150 }) => {
       },
       timeScale: {
         borderColor: '#e0e0e0',
-        timeVisible: true,
+        timeVisible: false,
         secondsVisible: false,
-        visible: false, // Sync with main chart
+        visible: false, // Hide time scale, show only on bottom chart
       },
       height: height,
     });

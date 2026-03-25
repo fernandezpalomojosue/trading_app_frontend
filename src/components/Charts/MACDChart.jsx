@@ -29,7 +29,7 @@ const MACDChart = ({ data, height = 150 }) => {
         borderColor: '#e0e0e0',
         timeVisible: true,
         secondsVisible: false,
-        visible: false, // Sync with main chart
+        visible: true, // Show time scale on bottom chart
       },
       height: height,
     });
