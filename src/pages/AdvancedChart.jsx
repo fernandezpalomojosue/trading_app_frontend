@@ -53,8 +53,8 @@ const AdvancedChart = () => {
         const candlesData = await marketService.getCandles(symbol, timespan, 1, 5000, startDateStr, null);
         setCandles(candlesData);
         
-        // Fetch indicators
-        await fetchIndicators();
+        // Fetch indicators with same date range
+        await fetchIndicators(startDateStr);
       } catch (err) {
         setError({
           type: 'network',
@@ -66,12 +66,16 @@ const AdvancedChart = () => {
       }
     };
 
-    const fetchIndicators = async () => {
+    const fetchIndicators = async (startDateStr) => {
       try {
         setIndicatorsLoading(true);
         
-        // Fetch all indicators in a single call
-        const data = await indicatorsService.getAllIndicators(symbol, { timespan });
+        // Fetch all indicators with same date range as candles
+        const data = await indicatorsService.getAllIndicators(symbol, { 
+          timespan,
+          start_date: startDateStr,
+          limit: 5000,
+        });
         
         if (data && data.results && data.results.length > 0) {
           const lastResult = data.results[data.results.length - 1];
