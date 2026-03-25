@@ -33,8 +33,24 @@ const AdvancedChart = () => {
         setLoading(true);
         setError(null);
 
-        // Fetch candles and indicators
-        const candlesData = await marketService.getCandles(symbol, timespan);
+        // Calculate date range based on timespan (same as AssetDetail)
+        const endDate = new Date();
+        let startDate = new Date();
+        
+        if (timespan === 'day') {
+          startDate.setDate(endDate.getDate() - 12); 
+        } else if (timespan === 'week') {
+          startDate.setDate(endDate.getDate() - 69); 
+        } else if (timespan === 'month') {
+          startDate.setMonth(endDate.getMonth() - 9); 
+        } else if (timespan === 'year') {
+          startDate.setFullYear(endDate.getFullYear() - 2); 
+        }
+        
+        const startDateStr = startDate.toISOString().split('T')[0];
+
+        // Fetch candles with date range
+        const candlesData = await marketService.getCandles(symbol, timespan, 1, 5000, startDateStr, null);
         setCandles(candlesData);
         
         // Fetch indicators
