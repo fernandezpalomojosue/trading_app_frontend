@@ -34,27 +34,28 @@ const AdvancedChart = () => {
         setError(null);
 
         // Calculate date range and limit based on timespan
+        // Add 25 buffer candles for indicator calculation
         let limit;
         const endDate = new Date();
         let startDate = new Date();
         
         if (timespan === 'day') {
-          limit = 100;
-          startDate.setDate(endDate.getDate() - 120); 
+          limit = 100 + 25;
+          startDate.setDate(endDate.getDate() - 125); 
         } else if (timespan === 'week') {
-          limit = 50;
-          startDate.setDate(endDate.getDate() - 365); 
+          limit = 50 + 25;
+          startDate.setDate(endDate.getDate() - (365 + 175)); 
         } else if (timespan === 'month') {
-          limit = 20;
-          startDate.setMonth(endDate.getMonth() - 24); 
+          limit = 20 + 25;
+          startDate.setMonth(endDate.getMonth() - (24 + 25)); 
         } else if (timespan === 'year') {
-          limit = 2;
-          startDate.setFullYear(endDate.getFullYear() - 5); 
+          limit = 2 + 25;
+          startDate.setFullYear(endDate.getFullYear() - (5 + 25)); 
         }
         
         const startDateStr = startDate.toISOString().split('T')[0];
 
-        // Fetch candles with adjusted limit
+        // Fetch candles with buffer for indicators
         const candlesData = await marketService.getCandles(symbol, timespan, 1, limit, startDateStr, null);
         setCandles(candlesData);
         

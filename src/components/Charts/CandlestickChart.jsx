@@ -94,10 +94,14 @@ const CandlestickChart = ({ data, indicators, height = 500 }) => {
     // Handle both direct array and {results: array} format
     const dataArray = data?.results || data;
     
-    if (!dataArray || !Array.isArray(dataArray) || dataArray.length === 0) return;
+    if (!dataArray || !Array.isArray(dataArray) || dataArray.length <= 25) return;
     if (!candlestickSeriesRef.current || !volumeSeriesRef.current) return;
 
-    const candleData = dataArray.map(candle => ({
+    // Skip first 25 candles (where indicators have null values)
+    const skipCount = 25;
+    const trimmedData = dataArray.slice(skipCount);
+
+    const candleData = trimmedData.map(candle => ({
       time: Math.floor((candle.t || candle.timestamp) / 1000),
       open: candle.o ?? candle.open,
       high: candle.h ?? candle.high,
@@ -105,7 +109,7 @@ const CandlestickChart = ({ data, indicators, height = 500 }) => {
       close: candle.c ?? candle.close,
     }));
 
-    const volumeData = dataArray.map(candle => ({
+    const volumeData = trimmedData.map(candle => ({
       time: Math.floor((candle.t || candle.timestamp) / 1000),
       value: candle.v ?? candle.volume,
       color: (candle.c ?? candle.close) >= (candle.o ?? candle.open) ? '#22c55e' : '#ef4444',
@@ -114,9 +118,10 @@ const CandlestickChart = ({ data, indicators, height = 500 }) => {
     candlestickSeriesRef.current.setData(candleData);
     volumeSeriesRef.current.setData(volumeData);
 
-    // Filter and plot indicators that match candle timestamps
+    // Filter and plot indicators that match remaining candle timestamps
     if (indicators?.history && indicators.candleTimestamps && indicators.history.length > 0) {
-      const candleTimes = new Set(indicators.candleTimestamps.map(t => Math.floor(t / 1000)));
+      const trimmedTimestamps = indicators.candleTimestamps.slice(skipCount);
+      const candleTimes = new Set(trimmedTimestamps.map(t => Math.floor(t / 1000)));
       
       const emaData = indicators.history
         .map(item => ({
