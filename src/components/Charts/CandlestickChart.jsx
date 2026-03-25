@@ -46,9 +46,18 @@ const CandlestickChart = ({ data, height = 500 }) => {
       borderDownColor: '#ef4444',
       wickUpColor: '#22c55e',
       wickDownColor: '#ef4444',
+      priceScaleId: 'right',
     });
 
     candlestickSeriesRef.current = candlestickSeries;
+
+    // Candlesticks occupy top 80% of chart
+    candlestickSeries.priceScale().applyOptions({
+      scaleMargins: {
+        top: 0.1,
+        bottom: 0.3,
+      },
+    });
 
     // Create volume series (histogram) using correct v5 API: chart.addSeries(HistogramSeries, options)
     const volumeSeries = chart.addSeries(HistogramSeries, {
@@ -56,16 +65,16 @@ const CandlestickChart = ({ data, height = 500 }) => {
       priceFormat: {
         type: 'volume',
       },
-      priceScaleId: '',
+      priceScaleId: 'volume',
     });
 
     volumeSeriesRef.current = volumeSeries;
 
-    // Volume at bottom
-    volumeSeries.priceScale().applyOptions({
+    // Volume at bottom with its own scale
+    chart.priceScale('volume').applyOptions({
       scaleMargins: {
-        top: 0.8,
-        bottom: 0,
+        top: 0.75,
+        bottom: 0.05,
       },
     });
 
