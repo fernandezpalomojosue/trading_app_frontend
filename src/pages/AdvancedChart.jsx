@@ -33,28 +33,33 @@ const AdvancedChart = () => {
         setLoading(true);
         setError(null);
 
-        // Calculate date range based on timespan (same as AssetDetail)
+        // Calculate date range and limit based on timespan
+        let limit;
         const endDate = new Date();
         let startDate = new Date();
         
         if (timespan === 'day') {
-          startDate.setDate(endDate.getDate() - 12); 
+          limit = 100;
+          startDate.setDate(endDate.getDate() - 120); 
         } else if (timespan === 'week') {
-          startDate.setDate(endDate.getDate() - 69); 
+          limit = 50;
+          startDate.setDate(endDate.getDate() - 365); 
         } else if (timespan === 'month') {
-          startDate.setMonth(endDate.getMonth() - 9); 
+          limit = 20;
+          startDate.setMonth(endDate.getMonth() - 24); 
         } else if (timespan === 'year') {
-          startDate.setFullYear(endDate.getFullYear() - 2); 
+          limit = 2;
+          startDate.setFullYear(endDate.getFullYear() - 5); 
         }
         
         const startDateStr = startDate.toISOString().split('T')[0];
 
-        // Fetch candles with date range
-        const candlesData = await marketService.getCandles(symbol, timespan, 1, 5000, startDateStr, null);
+        // Fetch candles with adjusted limit
+        const candlesData = await marketService.getCandles(symbol, timespan, 1, limit, startDateStr, null);
         setCandles(candlesData);
         
-        // Fetch indicators with same date range
-        await fetchIndicators(startDateStr);
+        // Fetch indicators with same limit
+        await fetchIndicators(startDateStr, limit);
       } catch (err) {
         setError({
           type: 'network',
@@ -66,15 +71,15 @@ const AdvancedChart = () => {
       }
     };
 
-    const fetchIndicators = async (startDateStr) => {
+    const fetchIndicators = async (startDateStr, limit) => {
       try {
         setIndicatorsLoading(true);
         
-        // Fetch all indicators with same date range as candles
+        // Fetch all indicators with adjusted limit
         const data = await indicatorsService.getAllIndicators(symbol, { 
           timespan,
           start_date: startDateStr,
-          limit: 5000,
+          limit: limit,
         });
         
         if (data && data.results && data.results.length > 0) {
@@ -188,7 +193,7 @@ const AdvancedChart = () => {
 
       {/* Candlestick Chart */}
       <div className="bg-white rounded-lg shadow-lg p-6">
-        <CandlestickChart data={candles.results || candles} indicators={indicators} height={500} />
+        <CandlestickChart data={candles.results || candles} height={500} />
       </div>
 
       {/* Key Stats */}
