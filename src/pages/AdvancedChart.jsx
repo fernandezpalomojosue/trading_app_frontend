@@ -4,6 +4,8 @@ import { marketService } from '../services/api';
 import { indicatorsService } from '../services/indicatorsService';
 import { ArrowLeft, BarChart3, TrendingUp, Activity } from 'lucide-react';
 import CandlestickChart from '../components/Charts/CandlestickChart';
+import RSIChart from '../components/Charts/RSIChart';
+import MACDChart from '../components/Charts/MACDChart';
 import ErrorDisplay from '../components/ErrorDisplay';
 
 const AdvancedChart = () => {
@@ -193,9 +195,16 @@ const AdvancedChart = () => {
         ))}
       </div>
 
-      {/* Candlestick Chart */}
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <CandlestickChart data={candles.results || candles} indicators={indicators} height={500} />
+      {/* Charts Stack */}
+      <div className="bg-white rounded-lg shadow-lg p-6 space-y-4">
+        {/* Main Candlestick Chart */}
+        <CandlestickChart data={candles.results || candles} indicators={indicators} height={400} />
+        
+        {/* RSI Chart */}
+        <RSIChart data={indicators.history} height={120} />
+        
+        {/* MACD Chart */}
+        <MACDChart data={indicators.history} height={120} />
       </div>
 
       {/* Key Stats */}

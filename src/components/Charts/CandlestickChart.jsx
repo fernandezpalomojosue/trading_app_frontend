@@ -73,7 +73,7 @@ const CandlestickChart = ({ data, indicators, height = 500 }) => {
     const emaSeries = chart.addSeries(LineSeries, {
       color: '#f59e0b',
       lineWidth: 2,
-      title: 'EMA',
+      lastValueVisible: false,
     });
     emaSeriesRef.current = emaSeries;
 
@@ -81,7 +81,7 @@ const CandlestickChart = ({ data, indicators, height = 500 }) => {
     const smaSeries = chart.addSeries(LineSeries, {
       color: '#3b82f6',
       lineWidth: 2,
-      title: 'SMA',
+      lastValueVisible: false,
     });
     smaSeriesRef.current = smaSeries;
 
