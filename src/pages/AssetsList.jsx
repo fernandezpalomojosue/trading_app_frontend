@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { marketService } from '../services/api';
-import { Search, TrendingUp, TrendingDown, Eye } from 'lucide-react';
+import { Search, TrendingUp, TrendingDown, Star } from 'lucide-react';
 
 const AssetsList = () => {
   const [assets, setAssets] = useState([]);
@@ -10,6 +10,19 @@ const AssetsList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [favorites, setFavorites] = useState(new Set());
+
+  const toggleFavorite = (symbol) => {
+    setFavorites(prev => {
+      const newFavorites = new Set(prev);
+      if (newFavorites.has(symbol)) {
+        newFavorites.delete(symbol);
+      } else {
+        newFavorites.add(symbol);
+      }
+      return newFavorites;
+    });
+  };
 
   const fetchAssets = async (page = 0, search = '') => {
     try {
@@ -93,7 +106,7 @@ const AssetsList = () => {
                   Símbolo
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Acciones
+                  Favorites
                 </th>
               </tr>
             </thead>
@@ -109,13 +122,19 @@ const AssetsList = () => {
                     </Link>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <Link 
-                      to={`/assets/${asset.symbol}`}
-                      className="inline-flex items-center space-x-1 text-blue-600 hover:text-blue-800"
+                    <button
+                      onClick={() => toggleFavorite(asset.symbol)}
+                      className={`inline-flex items-center justify-center p-1 rounded transition-colors ${
+                        favorites.has(asset.symbol) 
+                          ? 'text-yellow-500 hover:text-yellow-600' 
+                          : 'text-gray-400 hover:text-gray-500'
+                      }`}
                     >
-                      <Eye className="h-4 w-4" />
-                      <span>Ver</span>
-                    </Link>
+                      <Star 
+                        className="h-5 w-5" 
+                        fill={favorites.has(asset.symbol) ? "currentColor" : "none"}
+                      />
+                    </button>
                   </td>
                 </tr>
               ))}
