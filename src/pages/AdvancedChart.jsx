@@ -99,6 +99,8 @@ const AdvancedChart = () => {
                 histogram: lastResult.histogram,
               }
             },
+            order_signal: lastResult.order_signal,
+            signal_reason: lastResult.signal_reason,
             history: data.results,
             candleTimestamps: (candlesData.results || candlesData).map(c => c.t || c.timestamp),
           });
@@ -326,6 +328,29 @@ const AdvancedChart = () => {
                   }`}>
                     {indicators.macd?.last_value?.histogram?.toFixed(3) || '--'}
                   </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Trading Signal */}
+            <div className="bg-gray-50 p-4 rounded-lg border-2 border-gray-200">
+              <h4 className="text-sm font-semibold text-gray-700 mb-3">Trading Signal</h4>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-600">Recommendation:</span>
+                  <span className={`text-sm font-bold uppercase ${
+                    indicators.order_signal === 'buy' ? 'text-green-600' :
+                    indicators.order_signal === 'sell' ? 'text-red-600' :
+                    'text-yellow-600'
+                  }`}>
+                    {indicators.order_signal || '--'}
+                  </span>
+                </div>
+                <div className="mt-2 pt-2 border-t border-gray-200">
+                  <span className="text-xs text-gray-600">Analysis:</span>
+                  <p className="text-xs text-gray-700 mt-1 leading-relaxed">
+                    {indicators.signal_reason || '--'}
+                  </p>
                 </div>
               </div>
             </div>
