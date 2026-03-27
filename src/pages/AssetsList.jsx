@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { marketService } from '../services/api';
+import { marketService, favoritesService } from '../services/api';
 import { Search, TrendingUp, TrendingDown, Star } from 'lucide-react';
 
 const AssetsList = () => {
@@ -12,16 +12,27 @@ const AssetsList = () => {
   const [hasMore, setHasMore] = useState(true);
   const [favorites, setFavorites] = useState(new Set());
 
-  const toggleFavorite = (symbol) => {
-    setFavorites(prev => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(symbol)) {
-        newFavorites.delete(symbol);
+  const toggleFavorite = async (symbol) => {
+    const isFavorite = favorites.has(symbol);
+    try {
+      if (isFavorite) {
+        await favoritesService.removeFavorite(symbol);
+        setFavorites(prev => {
+          const newFavorites = new Set(prev);
+          newFavorites.delete(symbol);
+          return newFavorites;
+        });
       } else {
-        newFavorites.add(symbol);
+        await favoritesService.addFavorite(symbol);
+        setFavorites(prev => {
+          const newFavorites = new Set(prev);
+          newFavorites.add(symbol);
+          return newFavorites;
+        });
       }
-      return newFavorites;
-    });
+    } catch (err) {
+      console.error('Failed to toggle favorite:', err);
+    }
   };
 
   const fetchAssets = async (page = 0, search = '') => {
@@ -45,6 +56,18 @@ const AssetsList = () => {
 
   useEffect(() => {
     fetchAssets();
+    // Load user favorites on mount
+    const loadFavorites = async () => {
+      try {
+        const data = await favoritesService.getFavorites();
+        if (data.favorites) {
+          setFavorites(new Set(data.favorites.map(f => f.symbol)));
+        }
+      } catch (err) {
+        console.error('Failed to load favorites:', err);
+      }
+    };
+    loadFavorites();
   }, []);
 
   const handleSearch = (e) => {

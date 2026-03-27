@@ -98,4 +98,36 @@ export const marketService = {
   },
 };
 
+export const favoritesService = {
+  getFavorites: async () => {
+    try {
+      const response = await apiClient.get('/markets/favorites');
+      return response.data;
+    } catch (error) {
+      const processedError = handleError(error, 'favorites');
+      throw processedError;
+    }
+  },
+
+  addFavorite: async (symbol) => {
+    try {
+      const response = await apiClient.post(`/markets/favorites/${symbol}`);
+      return response.data;
+    } catch (error) {
+      const processedError = handleError(error, 'addFavorite');
+      throw processedError;
+    }
+  },
+
+  removeFavorite: async (symbol) => {
+    try {
+      const response = await apiClient.delete(`/markets/favorites/${symbol}`);
+      return response.data;
+    } catch (error) {
+      const processedError = handleError(error, 'removeFavorite');
+      throw processedError;
+    }
+  },
+};
+
 export default apiClient;
