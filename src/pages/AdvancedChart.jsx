@@ -85,8 +85,8 @@ const AdvancedChart = () => {
           limit: indicatorLimit,
         });
         
-        if (data && data.results && data.results.length > 0) {
-          const lastResult = data.results[data.results.length - 1];
+        if (data) {
+          const lastResult = data[data.length - 1];
           
           setIndicators({
             ema: { last_value: lastResult.ema },
@@ -101,7 +101,7 @@ const AdvancedChart = () => {
             },
             order_signal: lastResult.order_signal,
             signal_reason: lastResult.signal_reason,
-            history: data.results,
+            history: data,
             candleTimestamps: (candlesData.results || candlesData).map(c => c.t || c.timestamp),
           });
         }
