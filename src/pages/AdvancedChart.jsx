@@ -62,7 +62,7 @@ const AdvancedChart = () => {
         setCandles(candlesData);
         
         // Fetch indicators with 100 points always
-        await fetchIndicators(startDateStr, 100, candlesData);
+        await fetchIndicators(startDateStr, 150, candlesData);
       } catch (err) {
         setError({
           type: 'network',

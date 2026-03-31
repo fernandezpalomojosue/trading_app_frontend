@@ -11,7 +11,7 @@ export const indicatorsService = {
         slow: params.slow || 26,
         signal: params.signal || 9,
         timespan: params.timespan || 'day',
-        limit: params.limit || 100,
+        limit: params.limit || 150,
         ...(params.start_date && { start_date: params.start_date }),
         ...(params.end_date && { end_date: params.end_date }),
       });
