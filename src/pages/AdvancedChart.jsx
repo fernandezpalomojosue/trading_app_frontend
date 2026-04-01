@@ -20,6 +20,10 @@ const AdvancedChart = () => {
     rsi: null,
     macd: null,
   });
+  const [signal, setSignal] = useState({
+    order_signal: null,
+    signal_reason: null,
+  });
   const [indicatorsLoading, setIndicatorsLoading] = useState(false);
 
   const timespans = [
@@ -63,6 +67,9 @@ const AdvancedChart = () => {
         
         // Fetch indicators with 100 points always
         await fetchIndicators(startDateStr, 150, candlesData);
+        
+        // Fetch signal separately
+        await fetchSignal();
       } catch (err) {
         setError({
           type: 'network',
@@ -99,8 +106,6 @@ const AdvancedChart = () => {
                 histogram: lastResult.histogram,
               }
             },
-            order_signal: lastResult.order_signal,
-            signal_reason: lastResult.signal_reason,
             history: data,
             candleTimestamps: (candlesData.results || candlesData).map(c => c.t || c.timestamp),
           });
@@ -110,6 +115,19 @@ const AdvancedChart = () => {
         // Don't set error state, just log it - indicators are optional
       } finally {
         setIndicatorsLoading(false);
+      }
+    };
+
+    const fetchSignal = async () => {
+      try {
+        const signalData = await marketService.getSignal(symbol);
+        setSignal({
+          order_signal: signalData.order_signal,
+          signal_reason: signalData.signal_reason,
+        });
+      } catch (err) {
+        console.error('Failed to load signal:', err);
+        // Don't set error state, just log it - signal is optional
       }
     };
 
@@ -339,17 +357,17 @@ const AdvancedChart = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-gray-600">Recommendation:</span>
                   <span className={`text-sm font-bold uppercase ${
-                    indicators.order_signal === 'buy' ? 'text-green-600' :
-                    indicators.order_signal === 'sell' ? 'text-red-600' :
+                    signal.order_signal === 'buy' ? 'text-green-600' :
+                    signal.order_signal === 'sell' ? 'text-red-600' :
                     'text-yellow-600'
                   }`}>
-                    {indicators.order_signal || '--'}
+                    {signal.order_signal || '--'}
                   </span>
                 </div>
                 <div className="mt-2 pt-2 border-t border-gray-200">
                   <span className="text-xs text-gray-600">Analysis:</span>
                   <p className="text-xs text-gray-700 mt-1 leading-relaxed">
-                    {indicators.signal_reason || '--'}
+                    {signal.signal_reason || '--'}
                   </p>
                 </div>
               </div>

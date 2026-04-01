@@ -96,6 +96,16 @@ export const marketService = {
       throw processedError;
     }
   },
+
+  getSignal: async (symbol) => {
+    try {
+      const response = await apiClient.get(`/markets/signal/${symbol}`);
+      return response.data;
+    } catch (error) {
+      const processedError = handleError(error, 'signal');
+      throw processedError;
+    }
+  },
 };
 
 export const favoritesService = {
