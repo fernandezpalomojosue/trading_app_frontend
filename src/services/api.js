@@ -99,7 +99,7 @@ export const marketService = {
 
   getSignal: async (symbol) => {
     try {
-      const response = await apiClient.get(`/signal/${symbol}`);
+      const response = await apiClient.get(`/signals/${symbol}`);
       return response.data;
     } catch (error) {
       const processedError = handleError(error, 'signal');
