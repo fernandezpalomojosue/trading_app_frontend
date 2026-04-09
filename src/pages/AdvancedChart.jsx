@@ -122,8 +122,8 @@ const AdvancedChart = () => {
       try {
         const signalData = await marketService.getSignal(symbol);
         setSignal({
-          order_signal: signalData.order_signal,
-          signal_reason: signalData.signal_reason,
+          order_signal: signalData.signal,
+          signal_reason: signalData.reason,
         });
       } catch (err) {
         console.error('Failed to load signal:', err);
