@@ -102,8 +102,8 @@ const AdvancedChart = () => {
             macd: { 
               last_value: {
                 macd: lastResult.macd,
-                signal: lastResult.signal,
-                histogram: lastResult.histogram,
+                signal: lastResult.macd_signal,
+                histogram: lastResult.macd_histogram,
               }
             },
             history: data,
