@@ -55,7 +55,6 @@ export const authService = {
       throw processedError;
     }
   },
-
 };
 
 export default authService;
