@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { marketService } from '../services/api';
+import { marketService } from '../services/strategiesService';
 import { TrendingUp, TrendingDown, Activity, DollarSign } from 'lucide-react';
 
 const MarketOverview = () => {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { aiStrategiesService } from '../services/api';
+import { aiStrategiesService } from '../services/strategiesService';
 import { Sparkles, Loader2, AlertTriangle, CheckCircle, ArrowRight, RefreshCw } from 'lucide-react';
 
 const AIStrategyGenerate = () => {

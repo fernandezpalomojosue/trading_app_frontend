@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { strategyService } from '../services/api';
+import { strategyService } from '../services/strategiesService';
 import { List, Loader2, AlertTriangle, ToggleLeft, ToggleRight, Sparkles, Plus } from 'lucide-react';
 
 const StrategiesList = () => {

@@ -1,4 +1,4 @@
-import apiClient from './api';
+import apiClient from './strategiesService';
 import { handleError } from '../utils/errorHandler';
 
 const api = apiClient;
