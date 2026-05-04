@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { marketService } from '../services/strategiesService';
+import { marketService } from '../services/api';
 import { portfolioService } from '../services/portfolioService';
 import { TrendingUp, TrendingDown, ArrowLeft, Activity, DollarSign, TrendingUp as BuyIcon, TrendingDown as SellIcon, BarChart3 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';

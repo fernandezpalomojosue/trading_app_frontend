@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { marketService, favoritesService } from '../services/strategiesService';
+import { marketService, favoritesService } from '../services/api';
 import { Search, TrendingUp, TrendingDown, Star } from 'lucide-react';
 
 const AssetsList = () => {

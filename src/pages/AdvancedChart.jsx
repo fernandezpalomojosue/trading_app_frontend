@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { marketService } from '../services/strategiesService';
+import { marketService } from '../services/api';
 import { indicatorsService } from '../services/indicatorsService';
 import { ArrowLeft, BarChart3, TrendingUp, Activity } from 'lucide-react';
 import CandlestickChart from '../components/Charts/CandlestickChart';

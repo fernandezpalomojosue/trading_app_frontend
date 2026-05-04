@@ -1,4 +1,4 @@
-import apiClient from './strategiesService';
+import apiClient from './api';
 import { handleError } from '../utils/errorHandler';
 
 export const indicatorsService = {
