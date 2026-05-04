@@ -140,4 +140,16 @@ export const favoritesService = {
   },
 };
 
+export const aiStrategiesService = {
+  generateStrategy: async (prompt) => {
+    try {
+      const response = await apiClient.post('/ai-strategies/generate', { prompt });
+      return response.data;
+    } catch (error) {
+      const processedError = handleError(error, 'generateStrategy');
+      throw processedError;
+    }
+  },
+};
+
 export default apiClient;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { TrendingUp, BarChart3, User, LogOut, Menu, X, Briefcase } from 'lucide-react';
+import { TrendingUp, BarChart3, User, LogOut, Menu, X, Briefcase, Sparkles } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
 const Navbar = () => {
@@ -46,6 +46,13 @@ const Navbar = () => {
                 >
                   <TrendingUp className="h-5 w-5" />
                   <span>Assets</span>
+                </Link>
+                <Link
+                  to="/strategies/generate"
+                  className="flex items-center space-x-2 text-gray-600 hover:text-purple-600 transition-colors"
+                >
+                  <Sparkles className="h-5 w-5" />
+                  <span>AI Strategies</span>
                 </Link>
                 <div className="flex items-center space-x-3 pl-6 border-l border-gray-300">
                   <div className="flex items-center space-x-2">
@@ -123,6 +130,14 @@ const Navbar = () => {
                   >
                     <TrendingUp className="h-5 w-5" />
                     <span>Assets</span>
+                  </Link>
+                  <Link
+                    to="/strategies/generate"
+                    className="flex items-center space-x-2 text-gray-600 hover:text-purple-600 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Sparkles className="h-5 w-5" />
+                    <span>AI Strategies</span>
                   </Link>
                   <div className="pt-3 border-t border-gray-200">
                     <div className="flex items-center space-x-2 mb-3">
