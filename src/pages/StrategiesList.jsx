@@ -30,7 +30,7 @@ const StrategiesList = () => {
       }
 
       const data = await strategyService.getUserStrategies(params);
-      setStrategies(data.favorites || data.strategies || []);
+      setStrategies(data.items || []);
     } catch (err) {
       setError('Error al cargar las estrategias');
       console.error('Failed to load strategies:', err);
@@ -148,9 +148,6 @@ const StrategiesList = () => {
                   Description
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Action
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -169,11 +166,6 @@ const StrategiesList = () => {
                     <div className="text-sm text-gray-600 max-w-xs truncate">
                       {strategy.description}
                     </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full uppercase ${getActionColor(strategy.action)}`}>
-                      {strategy.action}
-                    </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
