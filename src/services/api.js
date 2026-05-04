@@ -152,4 +152,45 @@ export const aiStrategiesService = {
   },
 };
 
+export const strategyService = {
+  getUserStrategies: async (params = {}) => {
+    try {
+      const { skip = 0, limit = 50, active_only } = params;
+      const queryParams = new URLSearchParams();
+      if (skip) queryParams.append('skip', skip);
+      if (limit) queryParams.append('limit', limit);
+      if (active_only !== undefined) queryParams.append('active_only', active_only);
+
+      const queryString = queryParams.toString();
+      const url = queryString ? `/strategies/user_list?${queryString}` : '/strategies/user_list';
+
+      const response = await apiClient.get(url);
+      return response.data;
+    } catch (error) {
+      const processedError = handleError(error, 'getUserStrategies');
+      throw processedError;
+    }
+  },
+
+  getStrategyById: async (id) => {
+    try {
+      const response = await apiClient.get(`/strategies/${id}`);
+      return response.data;
+    } catch (error) {
+      const processedError = handleError(error, 'getStrategyById');
+      throw processedError;
+    }
+  },
+
+  updateStrategy: async (id, data) => {
+    try {
+      const response = await apiClient.put(`/strategies/${id}`, data);
+      return response.data;
+    } catch (error) {
+      const processedError = handleError(error, 'updateStrategy');
+      throw processedError;
+    }
+  },
+};
+
 export default apiClient;

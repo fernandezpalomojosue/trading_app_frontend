@@ -48,7 +48,7 @@ const Navbar = () => {
                   <span>Assets</span>
                 </Link>
                 <Link
-                  to="/strategies/generate"
+                  to="/strategies"
                   className="flex items-center space-x-2 text-gray-600 hover:text-purple-600 transition-colors"
                 >
                   <Sparkles className="h-5 w-5" />
@@ -132,7 +132,7 @@ const Navbar = () => {
                     <span>Assets</span>
                   </Link>
                   <Link
-                    to="/strategies/generate"
+                    to="/strategies"
                     className="flex items-center space-x-2 text-gray-600 hover:text-purple-600 transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >

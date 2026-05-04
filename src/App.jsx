@@ -12,6 +12,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import ErrorTestPage from './pages/ErrorTestPage';
 import AIStrategyGenerate from './pages/AIStrategyGenerate';
+import StrategiesList from './pages/StrategiesList';
 
 function App() {
   return (
@@ -47,6 +48,11 @@ function App() {
               <Route path="/assets/:symbol/advanced-chart" element={
                 <ProtectedRoute>
                   <AdvancedChart />
+                </ProtectedRoute>
+              } />
+              <Route path="/strategies" element={
+                <ProtectedRoute>
+                  <StrategiesList />
                 </ProtectedRoute>
               } />
               <Route path="/strategies/generate" element={
