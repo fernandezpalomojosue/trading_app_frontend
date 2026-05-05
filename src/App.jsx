@@ -13,6 +13,7 @@ import Register from './pages/Register';
 import ErrorTestPage from './pages/ErrorTestPage';
 import AIStrategyGenerate from './pages/AIStrategyGenerate';
 import StrategiesList from './pages/StrategiesList';
+import StrategyTest from './pages/StrategyTest';
 
 function App() {
   return (
@@ -58,6 +59,11 @@ function App() {
               <Route path="/strategies/generate" element={
                 <ProtectedRoute>
                   <AIStrategyGenerate />
+                </ProtectedRoute>
+              } />
+              <Route path="/strategies/:id/test" element={
+                <ProtectedRoute>
+                  <StrategyTest />
                 </ProtectedRoute>
               } />
             </Routes>

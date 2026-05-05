@@ -184,10 +184,10 @@ const StrategiesList = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <Link
-                      to={`/strategies/${strategy.id}`}
+                      to={`/strategies/${strategy.id}/test`}
                       className="text-purple-600 hover:text-purple-900"
                     >
-                      View
+                      Test
                     </Link>
                   </td>
                 </tr>
