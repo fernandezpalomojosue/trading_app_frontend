@@ -196,7 +196,7 @@ export const strategyService = {
 export const executionPlansService = {
   getAllPlans: async () => {
     try {
-      const response = await apiClient.get('/execution-plans');
+      const response = await apiClient.get('/execution-plans/user_list');
       return response.data;
     } catch (error) {
       const processedError = handleError(error, 'getAllPlans');
@@ -216,7 +216,7 @@ export const executionPlansService = {
 
   createPlan: async (data) => {
     try {
-      const response = await apiClient.post('/execution-plans', data);
+      const response = await apiClient.post('/execution-plans/create', data);
       return response.data;
     } catch (error) {
       const processedError = handleError(error, 'createPlan');
