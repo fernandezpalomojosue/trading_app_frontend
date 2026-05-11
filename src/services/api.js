@@ -193,4 +193,56 @@ export const strategyService = {
   },
 };
 
+export const executionPlansService = {
+  getAllPlans: async () => {
+    try {
+      const response = await apiClient.get('/execution-plans');
+      return response.data;
+    } catch (error) {
+      const processedError = handleError(error, 'getAllPlans');
+      throw processedError;
+    }
+  },
+
+  getPlanById: async (id) => {
+    try {
+      const response = await apiClient.get(`/execution-plans/${id}`);
+      return response.data;
+    } catch (error) {
+      const processedError = handleError(error, 'getPlanById');
+      throw processedError;
+    }
+  },
+
+  createPlan: async (data) => {
+    try {
+      const response = await apiClient.post('/execution-plans', data);
+      return response.data;
+    } catch (error) {
+      const processedError = handleError(error, 'createPlan');
+      throw processedError;
+    }
+  },
+
+  updatePlan: async (id, data) => {
+    try {
+      const response = await apiClient.patch(`/execution-plans/${id}`, data);
+      return response.data;
+    } catch (error) {
+      const processedError = handleError(error, 'updatePlan');
+      throw processedError;
+    }
+  },
+
+  deletePlan: async (id) => {
+    try {
+      await apiClient.delete(`/execution-plans/${id}`);
+      return true;
+    } catch (error) {
+      const processedError = handleError(error, 'deletePlan');
+      throw processedError;
+    }
+  },
+};
+
 export default apiClient;

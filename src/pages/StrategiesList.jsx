@@ -183,12 +183,21 @@ const StrategiesList = () => {
                     </button>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <Link
-                      to={`/strategies/${strategy.id}/test`}
-                      className="text-purple-600 hover:text-purple-900"
-                    >
-                      Test
-                    </Link>
+                    <div className="flex items-center space-x-3">
+                      <Link
+                        to={`/strategies/${strategy.id}/test`}
+                        className="text-purple-600 hover:text-purple-900"
+                      >
+                        Test
+                      </Link>
+                      <Link
+                        to={`/execution-plans/create?strategy_id=${strategy.id}`}
+                        className="text-blue-600 hover:text-blue-900 flex items-center space-x-1"
+                      >
+                        <Plus className="h-3 w-3" />
+                        <span>Plan</span>
+                      </Link>
+                    </div>
                   </td>
                 </tr>
               ))}

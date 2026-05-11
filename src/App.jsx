@@ -14,6 +14,9 @@ import ErrorTestPage from './pages/ErrorTestPage';
 import AIStrategyGenerate from './pages/AIStrategyGenerate';
 import StrategiesList from './pages/StrategiesList';
 import StrategyTest from './pages/StrategyTest';
+import ExecutionPlansList from './pages/ExecutionPlansList';
+import CreateExecutionPlan from './pages/CreateExecutionPlan';
+import EditExecutionPlan from './pages/EditExecutionPlan';
 
 function App() {
   return (
@@ -64,6 +67,21 @@ function App() {
               <Route path="/strategies/:id/test" element={
                 <ProtectedRoute>
                   <StrategyTest />
+                </ProtectedRoute>
+              } />
+              <Route path="/execution-plans" element={
+                <ProtectedRoute>
+                  <ExecutionPlansList />
+                </ProtectedRoute>
+              } />
+              <Route path="/execution-plans/create" element={
+                <ProtectedRoute>
+                  <CreateExecutionPlan />
+                </ProtectedRoute>
+              } />
+              <Route path="/execution-plans/:id/edit" element={
+                <ProtectedRoute>
+                  <EditExecutionPlan />
                 </ProtectedRoute>
               } />
             </Routes>
