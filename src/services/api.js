@@ -191,6 +191,16 @@ export const strategyService = {
       throw processedError;
     }
   },
+
+  deleteStrategy: async (id) => {
+    try {
+      await apiClient.delete(`/strategies/${id}`);
+      return true;
+    } catch (error) {
+      const processedError = handleError(error, 'deleteStrategy');
+      throw processedError;
+    }
+  },
 };
 
 export const executionPlansService = {
