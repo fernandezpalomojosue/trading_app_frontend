@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { strategyService } from '../services/api';
-import { List, Loader2, AlertTriangle, ToggleLeft, ToggleRight, Sparkles, Plus } from 'lucide-react';
+import { List, Loader2, AlertTriangle, ToggleLeft, ToggleRight, Sparkles, Plus, Edit2, Trash2 } from 'lucide-react';
 
 const StrategiesList = () => {
   const [strategies, setStrategies] = useState([]);
@@ -47,6 +47,20 @@ const StrategiesList = () => {
     } catch (err) {
       console.error('Failed to toggle strategy:', err);
       alert('Error al actualizar estrategia');
+    }
+  };
+
+  const deleteStrategy = async (id) => {
+    if (!confirm('¿Estás seguro de que quieres eliminar esta estrategia?')) {
+      return;
+    }
+
+    try {
+      await strategyService.deleteStrategy(id);
+      setStrategies(strategies.filter(strategy => strategy.id !== id));
+    } catch (err) {
+      console.error('Failed to delete strategy:', err);
+      alert('Error al eliminar estrategia');
     }
   };
 
@@ -191,8 +205,22 @@ const StrategiesList = () => {
                         Test
                       </Link>
                       <Link
-                        to={`/execution-plans/create?strategy_id=${strategy.id}`}
+                        to={`/strategies/${strategy.id}/edit`}
                         className="text-blue-600 hover:text-blue-900 flex items-center space-x-1"
+                      >
+                        <Edit2 className="h-3 w-3" />
+                        <span>Edit</span>
+                      </Link>
+                      <button
+                        onClick={() => deleteStrategy(strategy.id)}
+                        className="text-red-600 hover:text-red-900 flex items-center space-x-1"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                        <span>Delete</span>
+                      </button>
+                      <Link
+                        to={`/execution-plans/create?strategy_id=${strategy.id}`}
+                        className="text-green-600 hover:text-green-900 flex items-center space-x-1"
                       >
                         <Plus className="h-3 w-3" />
                         <span>Plan</span>
