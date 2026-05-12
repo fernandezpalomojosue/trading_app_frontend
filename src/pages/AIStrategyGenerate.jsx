@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { aiStrategiesService } from '../services/api';
 import { Sparkles, Loader2, AlertTriangle, CheckCircle, ArrowRight, RefreshCw } from 'lucide-react';
+import { handleError } from '../utils/errorHandler';
 
 const AIStrategyGenerate = () => {
   const navigate = useNavigate();
@@ -32,25 +33,12 @@ const AIStrategyGenerate = () => {
       const data = await aiStrategiesService.generateStrategy(prompt);
       setResult(data);
     } catch (err) {
-      if (err.response?.status === 422) {
-        setError({
-          type: 'validation',
-          message: 'No se pudo generar estrategia válida. Revisa tu descripción.',
-          details: err.response?.data?.details
-        });
-      } else if (err.response?.status === 429) {
-        const retryAfter = err.response?.data?.retry_after_seconds || 60;
-        setError({
-          type: 'rate_limit',
-          message: `Demasiadas solicitudes. Espera ${retryAfter} segundos.`,
-          retryAfter
-        });
-      } else {
-        setError({
-          type: 'server',
-          message: 'Error del servidor. Intenta más tarde.'
-        });
-      }
+      const processedError = handleError(err, 'generateStrategy');
+      setError({
+        type: 'error',
+        message: processedError.message,
+        details: err.response?.data?.details || processedError
+      });
     } finally {
       setLoading(false);
     }
