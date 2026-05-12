@@ -37,7 +37,7 @@ const AIStrategyGenerate = () => {
       setError({
         type: 'error',
         message: processedError.message,
-        details: err.response?.data?.details || processedError
+        details: processedError.details || processedError
       });
     } finally {
       setLoading(false);
