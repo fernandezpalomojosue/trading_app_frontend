@@ -34,6 +34,8 @@ const AIStrategyGenerate = () => {
       setResult(data);
     } catch (err) {
       const processedError = handleError(err, 'generateStrategy');
+      console.log('Debug - Original error:', err);
+      console.log('Debug - Processed error:', processedError);
       setError({
         type: 'error',
         message: processedError.message,
