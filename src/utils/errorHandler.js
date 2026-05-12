@@ -33,7 +33,15 @@ class ErrorHandler {
         processedError.suggestions = [];
       } else if (errorData?.detail) {
         // Use backend detail directly if no message
-        processedError.message = typeof errorData.detail === 'string' ? errorData.detail : JSON.stringify(errorData.detail);
+        if (typeof errorData.detail === 'string') {
+          processedError.message = errorData.detail;
+        } else if (errorData.detail?.message) {
+          // Extract message from detail object
+          processedError.message = errorData.detail.message;
+          processedError.details = errorData.detail; // Keep full object for UI
+        } else {
+          processedError.message = JSON.stringify(errorData.detail);
+        }
         processedError.suggestions = [];
       } else {
         // Default message - only when backend provides nothing
